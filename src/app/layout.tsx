@@ -1,4 +1,5 @@
 import { Navbar } from "@/components/Navbar";
+
 import "./globals.css";
 
 export default function RootLayout({
@@ -9,7 +10,7 @@ export default function RootLayout({
   console.log("log in root layout");
   return (
     <html lang="en">
-      <body className="min-w-screen min-h-screen">
+      <body className="min-w-screen min-h-screen lg:max-w-[930px] lg:m-auto">
         <Navbar />
         {children}
       </body>
