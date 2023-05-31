@@ -64,7 +64,7 @@ export const Navbar = () => {
           <div
             className={clsx(
               "absolute top-0 left-0 translate-x-full w-screen h-screen",
-              { "translate-x-0": isNavMenuOpen }
+              { "!translate-x-0": isNavMenuOpen }
             )}
             onClick={onCloseNavbarClick}
           />

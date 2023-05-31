@@ -5,23 +5,6 @@ import { Category, PostType } from "@/utils/types";
 import clsx from "clsx";
 import useSWR from "swr";
 
-const categories = ["Psychology", "Growth", "Writing", "Habits"];
-
-const categoriesDuplicated = [
-  "Growth",
-  "Psychology",
-  "Habit",
-  "Writing",
-  "Growth",
-  "Psychology",
-  "Habit",
-  "Writing",
-  "Growth",
-  "Psychology",
-  "Habit",
-  "Writing",
-];
-
 const selectedCategory = "Habit";
 
 // TODO: sever side rendering optimised
@@ -42,8 +25,8 @@ const Page = () => {
 
   return (
     <div className="padding-x flex flex-col items-center">
-      <h2 className="tracking-[4px] text-base mb-[7.9vw]">Articles</h2>
-      <div className="text-primary self-start font-marker tracking-[7px] border-b-2 border-b-primary mb-[7.9vw] lg:text-5xl lg:border-b-4 lg:pb-4">
+      <h2 className="text-base mb-[7.9vw]">Articles</h2>
+      <div className="text-primary self-start font-marker tracking-[7px] border-b-[3px] border-b-primary mb-[47px] lg:text-5xl lg:border-b-4 lg:pb-4">
         Habit
       </div>
       <div className="lg:grid lg:grid-cols-3 w-full">
@@ -61,7 +44,7 @@ const Page = () => {
           })}
         </div>
         <div className="invisible lg:visible lg:col-span-1 lg:ml-[80px]">
-          <div className="text-xl">Categories</div>
+          <div>Categories</div>
           <div className="mt-2">
             {(categories as Category[])?.map(({ name, id }, index) => (
               <div
