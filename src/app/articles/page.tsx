@@ -1,57 +1,88 @@
-import clsx from "clsx";
+"use client";
 
-const articles = [
-  {
-    id: "id",
-    title: "How to overcome the fear of getting started",
-    categories: ["Youtube"],
-    publishedDate: "April 13, 2023",
-    abstract:
-      "The unfamiliar is scary territory to be in. Whether we're trying to ride a bike or want to start a blog, doing something new can be uncomfortable. This article explores the fear of getting started. That initial hesitation is",
-  },
+import { CategoryCarousel } from "@/components/Articles/CategoryCarousel";
+import { Category, PostType } from "@/utils/types";
+import clsx from "clsx";
+import useSWR from "swr";
+
+const categories = ["Psychology", "Growth", "Writing", "Habits"];
+
+const categoriesDuplicated = [
+  "Growth",
+  "Psychology",
+  "Habit",
+  "Writing",
+  "Growth",
+  "Psychology",
+  "Habit",
+  "Writing",
+  "Growth",
+  "Psychology",
+  "Habit",
+  "Writing",
 ];
 
-const categories = ["Psychology", "Personal Development", "Writing", "Habits"];
+const selectedCategory = "Habit";
 
-const Articles = () => {
+// TODO: sever side rendering optimised
+// TODO: handle error state
+// TODO: handle loading state
+// pagination and category, if I only fetch a number of it
+
+const fetcher = (...args: [RequestInfo, RequestInit?]) =>
+  fetch(...args).then((res) => res.json());
+
+const Page = () => {
+  const { data: posts, isLoading, error } = useSWR("/api/articles", fetcher);
+  const { data: categories } = useSWR("/api/categories", fetcher);
+
+  if (isLoading) {
+    return <div>is loading...</div>;
+  }
+
   return (
     <div className="padding-x flex flex-col items-center">
       <h2 className="tracking-[4px] text-base mb-[7.9vw]">Articles</h2>
       <div className="text-primary self-start font-marker tracking-[7px] border-b-2 border-b-primary mb-[7.9vw] lg:text-5xl lg:border-b-4 lg:pb-4">
         Habit
       </div>
-      <div className="lg:grid lg:grid-cols-3">
+      <div className="lg:grid lg:grid-cols-3 w-full">
         <div className="lg:col-span-2">
-          {articles.map(
-            ({ id, title, categories, publishedDate, abstract }) => (
+          {(posts as PostType[])?.map(({ id, content }) => {
+            const { title, publishedDate, abstract, category } = content;
+            return (
               <div className="rounded-md shadow-lg px-4 py-4" key={id}>
                 <h1 className="text-xl font-bold">{title}</h1>
-                <div className="py-4 text-sm">{categories.join(",")}</div>
+                <div className="py-4 text-sm">{category.join(",")}</div>
                 <div className="pb-4 text-sm">{publishedDate}</div>
                 <div className="text-sm">{abstract}</div>
               </div>
-            )
-          )}
+            );
+          })}
         </div>
         <div className="invisible lg:visible lg:col-span-1 lg:ml-[80px]">
           <div className="text-xl">Categories</div>
           <div className="mt-2">
-            {categories.map((category, index) => (
+            {(categories as Category[])?.map(({ name, id }, index) => (
               <div
-                key={category}
+                key={id}
                 className={clsx({
                   "pt-2": index !== 0,
                   "border-l-2 border-l-grey pl-2 pb-2": true,
                 })}
               >
-                {category}
+                {name}
               </div>
             ))}
           </div>
         </div>
       </div>
+      <CategoryCarousel
+        categories={categories}
+        selectedCategory={selectedCategory}
+      />
     </div>
   );
 };
 
-export default Articles;
+export default Page;

@@ -2,27 +2,9 @@
 
 import clsx from "clsx";
 import Image from "next/image";
+import { useState } from "react";
 
-import filterIcon from "../../../public/svg/filter.svg";
-import navigationIcon from "../../../public/svg/navigation-variant.svg";
-
-const mobileNavbarButtons = [
-  {
-    icon: filterIcon,
-    key: "filter",
-    onClick: () => {
-      console.log("on filter click");
-    },
-  },
-  {
-    icon: navigationIcon,
-    key: "navigation",
-    onClick: () => {
-      console.log("on navigation click");
-    },
-    className: "md:hidden",
-  },
-];
+import arrowIcon from "../../../public/svg/chevron-right.svg";
 
 const navbarItems = [
   {
@@ -43,11 +25,21 @@ const navbarItems = [
 ];
 
 export const Navbar = () => {
+  const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
+
+  const onOpenNavbarItemClick = () => {
+    setIsNavMenuOpen(true);
+  };
+
+  const onCloseNavbarClick = () => {
+    setIsNavMenuOpen(false);
+  };
+
   return (
     <>
       <nav className="padding-x pt-[30px] pb-[7.9vw] flex justify-between">
         <div>Logo</div>
-        <div className="invisible md:visible flex">
+        <div className="invisible lg:visible flex">
           {/* TODO: change to next link */}
           {navbarItems.map((item, index) => (
             <div
@@ -60,21 +52,49 @@ export const Navbar = () => {
             </div>
           ))}
         </div>
-      </nav>
-      <div className="fixed bottom-10 padding-x flex justify-between w-full">
-        {mobileNavbarButtons.map(({ icon, key, onClick, className }) => (
+        {/* mobile main menu navigation */}
+        <div
+          className={clsx(
+            "lg:invisible fixed w-screen h-screen top-0 left-0 flex translate-x-[85vw] min-[400px]:translate-x-[90vw] min-[651px]:translate-x-[92vw] min-[880px]:translate-x-[94vw] transition-transform	",
+            {
+              "!translate-x-0": isNavMenuOpen,
+            }
+          )}
+        >
+          <div
+            className={clsx(
+              "absolute top-0 left-0 translate-x-full w-screen h-screen",
+              { "translate-x-0": isNavMenuOpen }
+            )}
+            onClick={onCloseNavbarClick}
+          />
           <button
             className={clsx(
-              "w-[15.6vw] h-[15.6vw] max-w-[60px] max-h-[60px] rounded-full shadow-2xl flex justify-center items-center md:w-[11vw] md:h-[11vw] md:max-w-[85px] md:max-h-[85px]",
-              className
+              "bg-white shadow-md px-4 flex items-center justify-start h-[74px] z-10 rounded-l-full mt-[80vh]"
             )}
-            key={key}
-            onClick={onClick}
+            onClick={onOpenNavbarItemClick}
           >
-            <Image priority src={icon} alt="filter icon" />
+            <Image priority src={arrowIcon} alt="filter icon" />
           </button>
-        ))}
-      </div>
+          <div
+            className={clsx(
+              "bg-primary h-full w-full text-white padding-x py-4 z-20 flex flex-col items-start pl-16 justify-center"
+            )}
+          >
+            {navbarItems.map((item, index) => (
+              <button
+                key={item.key}
+                className={clsx({
+                  "text-2xl md:text-3xl bold": true,
+                  "mt-10": index !== 0,
+                })}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </nav>
     </>
   );
 };
