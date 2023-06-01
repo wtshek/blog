@@ -14,6 +14,7 @@ module.exports = {
       },
       colors: {
         primary: "#F38E0E",
+        secondary: "#F3EFE0",
       },
       fontFamily: {
         marker: "Permanent Marker, cursive",

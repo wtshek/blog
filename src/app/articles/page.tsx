@@ -1,6 +1,6 @@
 "use client";
 
-import { CategoryCarousel } from "@/components/Articles/CategoryCarousel";
+import { CategoryCarousel } from "@/components/Articles";
 import { Category, PostType } from "@/utils/types";
 import clsx from "clsx";
 import useSWR from "swr";
