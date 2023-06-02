@@ -81,7 +81,20 @@ export type NotionRichTextType = {
   }[];
 };
 
-export type NotionPostType = {
+export type NotionFileType = {
+  id: string;
+  type: string;
+  files: {
+    name: string;
+    type: string;
+    file: {
+      url: string;
+      expiry_time: string;
+    };
+  }[];
+};
+
+export type NotionDatabaseRowBaseType = {
   object: string;
   id: string;
   created_time: string;
@@ -95,15 +108,26 @@ export type NotionPostType = {
     database_id: string;
   };
   archived: boolean;
-  properties: {
-    Type: NotionSelectType;
-    Date: NotionDateType;
-    Progress: NotionProgressType;
-    Category: NotionMultiSelectType;
-    Title: NotionTitleType;
-    Abstract: NotionRichTextType;
-  };
   url: string;
+};
+
+export type NotionPostType = NotionDatabaseRowBaseType & {
+  properties: {
+    type: NotionSelectType;
+    date: NotionDateType;
+    progress: NotionProgressType;
+    category: NotionMultiSelectType;
+    title: NotionTitleType;
+    abstract: NotionRichTextType;
+  };
+};
+
+export type NotionConfigType = NotionDatabaseRowBaseType & {
+  properties: {
+    media: NotionFileType;
+    content: NotionRichTextType;
+    name: NotionTitleType;
+  };
 };
 
 export type NotionDatabaseType = {
@@ -212,7 +236,7 @@ export type Category = {
   name: string;
 };
 
-export type PostType = {
+export type BaseRecordType = {
   pageType: string;
   id: string;
   createdAt: string;
@@ -222,12 +246,23 @@ export type PostType = {
     type: string;
     database_id: string;
   };
-  recordType: string;
   url: string;
+};
+
+export type PostType = BaseRecordType & {
+  recordType: string;
   content: {
     publishedDate: string | null;
     category: string[];
     title: string;
     abstract: string;
+  };
+};
+
+export type ConfigType = BaseRecordType & {
+  content: {
+    name: string;
+    content?: string;
+    media?: string;
   };
 };

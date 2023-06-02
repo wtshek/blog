@@ -2,7 +2,7 @@ import notionAPI from "@/lib/notion";
 import { NextResponse } from "next/server";
 
 export const GET = async () => {
-  const categories = await notionAPI.getCategories();
+  const config = await notionAPI.getConfigContent();
 
-  return NextResponse.json(categories);
+  return NextResponse.json(config);
 };
