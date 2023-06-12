@@ -14,7 +14,7 @@ class NotionAPI {
     [key: string]: [
       { id: string; name: string; color: string },
       NotionPostType[]
-    ][];
+    ];
   }> => {
     const database = await this.notion.databases.query({
       database_id: process.env.NOTION_POST_LIST_DATABASE_KEY || "",

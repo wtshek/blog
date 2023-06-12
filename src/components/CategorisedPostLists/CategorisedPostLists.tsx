@@ -11,7 +11,7 @@ type CategorisedPostListType = {
     [key: string]: [
       { id: string; name: string; color: string },
       NotionPostType[]
-    ][];
+    ];
   };
   containerClassName?: string;
 };
@@ -20,6 +20,7 @@ export const CategorisedPostList: FC<CategorisedPostListType> = ({
   data,
   containerClassName,
 }) => {
+  console.log(Object.values(data));
   return (
     <section
       className={clsx(
