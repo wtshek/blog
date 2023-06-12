@@ -13,8 +13,8 @@ class NotionAPI {
   public getCategorizedPosts = async (): Promise<{
     [key: string]: [
       { id: string; name: string; color: string },
-      NotionPostType
-    ];
+      NotionPostType[]
+    ][];
   }> => {
     const database = await this.notion.databases.query({
       database_id: process.env.NOTION_POST_LIST_DATABASE_KEY || "",
@@ -36,7 +36,7 @@ class NotionAPI {
 
   public getPostsByCategory = async (
     categoryName: string
-  ): Promise<NotionPostType[]> => {
+  ): Promise<{ results: NotionPostType[] }> => {
     const posts = await this.notion.databases.query({
       database_id: process.env.NOTION_POST_LIST_DATABASE_KEY || "",
       filter: {
@@ -46,7 +46,7 @@ class NotionAPI {
         },
       },
     });
-    return posts as unknown as NotionPostType[];
+    return posts as unknown as { results: NotionPostType[] };
   };
 }
 

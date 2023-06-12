@@ -1,6 +1,5 @@
 "use client";
 
-import { CONFIG } from "@/utils/constants";
 import clsx from "clsx";
 import { useState } from "react";
 
@@ -13,16 +12,13 @@ export const SubscriptionForm = () => {
   const onClick = async () => {
     setStatus("loading");
 
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/subscribe`,
-      {
-        body: JSON.stringify({ email }),
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const res = await fetch(`/api/subscribe`, {
+      body: JSON.stringify({ email }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     setStatus(res.status === 201 ? "success" : "error");
   };

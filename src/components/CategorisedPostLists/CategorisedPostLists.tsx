@@ -7,7 +7,12 @@ import { FC } from "react";
 import arrowIcon from "../../../public/svg/arrow-right.svg";
 
 type CategorisedPostListType = {
-  data: [{ id: string; name: string; color: string }, NotionPostType[]][];
+  data: {
+    [key: string]: [
+      { id: string; name: string; color: string },
+      NotionPostType[]
+    ][];
+  };
   containerClassName?: string;
 };
 

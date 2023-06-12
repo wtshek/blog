@@ -1,15 +1,11 @@
 import { CategorisedPostList } from "@/components/CategorisedPostLists";
 import { SubscriptionForm } from "@/components/SubscriptionForm";
-import { CONFIG } from "@/utils/constants";
+import notionAPI from "@/lib/notion";
 
 const BreakLine = () => <hr className="bg-grey" />;
 
 export default async function Home() {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts?categorised=true`
-  );
-  console.log(res);
-  const categorisedPostList = await res.json();
+  const categorisedPostList = await notionAPI.getCategorizedPosts();
 
   return (
     <main className="padding-x m-auto lg:max-w-[930px]">
@@ -22,7 +18,7 @@ export default async function Home() {
         <div>Join the community and never miss a post!</div>
         <SubscriptionForm />
       </section>
-      <div className="absolute bg-primary w-screen h-1/3 lg:h-2/5 top-0 left-0 -z-10"></div>
+      <div className="absolute bg-primary w-screen h-1/3 lg:h-1/2 top-0 left-0 -z-10"></div>
 
       <BreakLine />
 
