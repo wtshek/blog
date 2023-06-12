@@ -266,3 +266,33 @@ export type ConfigType = BaseRecordType & {
     media?: string;
   };
 };
+
+export type RichTextType = {
+  rich_text: {
+    type: string;
+    text: {
+      content: string;
+      link: string | null;
+    };
+    annotations: {
+      bold: boolean;
+      italic: boolean;
+      strikethrough: boolean;
+      underline: boolean;
+      code: boolean;
+      color: string;
+    };
+    plain_text: string;
+    href: string | null;
+  }[];
+  color: string;
+};
+
+export type ImageType = {
+  caption: string[];
+  file: {
+    expiry_time: string;
+    url: string;
+  };
+  type: string;
+};
