@@ -8,6 +8,7 @@ export default async function Home() {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts?categorised=true`
   );
+  console.log(res);
   const categorisedPostList = await res.json();
 
   return (
