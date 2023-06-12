@@ -10,7 +10,9 @@ type PageProps = {
 
 const Page: ({ params }: PageProps) => Promise<any> = async ({ params }) => {
   const category = params.slug;
-  const posts = await fetch(`${CONFIG.apiPath}/api/posts?category=${category}`);
+  const posts = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts?category=${category}`
+  );
   const json = await posts.json();
 
   return (

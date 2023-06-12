@@ -5,7 +5,9 @@ import { CONFIG } from "@/utils/constants";
 const BreakLine = () => <hr className="bg-grey" />;
 
 export default async function Home() {
-  const res = await fetch(`${CONFIG.apiPath}/api/posts?categorised=true`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/posts?categorised=true`
+  );
   const categorisedPostList = await res.json();
 
   return (
