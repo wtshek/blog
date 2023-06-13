@@ -2,6 +2,8 @@ import { CategorisedPostList } from "@/components/CategorisedPostLists";
 import { SubscriptionForm } from "@/components/SubscriptionForm";
 import notionAPI from "@/lib/notion";
 
+export const revalidate = 1800;
+
 const BreakLine = () => <hr className="bg-grey" />;
 
 export default async function Home() {

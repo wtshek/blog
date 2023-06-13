@@ -6,6 +6,8 @@ import { FC } from "react";
 
 import arrowIcon from "../../../public/svg/arrow-right.svg";
 
+export const revalidate = 1800;
+
 type CategorisedPostListType = {
   data: {
     [key: string]: [

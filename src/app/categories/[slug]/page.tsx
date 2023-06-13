@@ -8,6 +8,8 @@ type PageProps = {
   params: { slug: string };
 };
 
+export const revalidate = 1800;
+
 const Page: ({ params }: PageProps) => Promise<any> = async ({ params }) => {
   const category = params.slug;
   const posts = await notionAPI.getPostsByCategory(category);
