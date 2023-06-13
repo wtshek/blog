@@ -5,10 +5,7 @@ const Page = async () => {
   const data = await notionAPI.getCategorizedPosts();
 
   return (
-    <CategorisedPostList
-      containerClassName="lg:max-w-[930px] m-auto"
-      data={data}
-    />
+    <CategorisedPostList containerClassName="lg:w-[930px] m-auto" data={data} />
   );
 };
 

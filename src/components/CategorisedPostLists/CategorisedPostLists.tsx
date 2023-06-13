@@ -20,11 +20,10 @@ export const CategorisedPostList: FC<CategorisedPostListType> = ({
   data,
   containerClassName,
 }) => {
-  console.log(Object.values(data));
   return (
     <section
       className={clsx(
-        "py-[76px] grid gap-[76px] lg:grid-cols-2 padding-x",
+        "py-[76px] grid gap-[76px] lg:grid-cols-2 padding-x justify-between",
         containerClassName
       )}
     >
