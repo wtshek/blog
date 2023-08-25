@@ -18,8 +18,14 @@ class NotionAPI {
   }> => {
     const database = await this.notion.databases.query({
       database_id: process.env.NOTION_POST_LIST_DATABASE_KEY || "",
+      filter: {
+        property: "progress",
+        select: {
+          equals: "Published",
+        },
+      },
     });
-    const results = database.results;
+    const { results } = database;
 
     return results.reduce((prev: any, curr) => {
       const category = (curr as any).properties.category.multi_select[0];
@@ -40,10 +46,20 @@ class NotionAPI {
     const posts = await this.notion.databases.query({
       database_id: process.env.NOTION_POST_LIST_DATABASE_KEY || "",
       filter: {
-        property: "category",
-        multi_select: {
-          contains: categoryName,
-        },
+        and: [
+          {
+            property: "category",
+            multi_select: {
+              contains: categoryName,
+            },
+          },
+          {
+            property: "progress",
+            select: {
+              equals: "Published",
+            },
+          },
+        ],
       },
     });
     return posts as unknown as { results: NotionPostType[] };

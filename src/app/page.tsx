@@ -1,7 +1,6 @@
 import { CategorisedPostList } from "@/components/CategorisedPostLists";
 import { SubscriptionForm } from "@/components/SubscriptionForm";
 import notionAPI from "@/lib/notion";
-import Head from "next/head";
 import Script from "next/script";
 
 export const revalidate = 1800;

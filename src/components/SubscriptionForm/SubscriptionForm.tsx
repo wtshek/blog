@@ -1,13 +1,14 @@
 "use client";
 
 import clsx from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const SubscriptionForm = () => {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<
     undefined | "loading" | "error" | "success"
   >();
+  const [isMounted, setIsMounted] = useState(false);
 
   const onClick = async () => {
     setStatus("loading");
@@ -22,6 +23,12 @@ export const SubscriptionForm = () => {
 
     setStatus(res.status === 201 ? "success" : "error");
   };
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
 
   return (
     <div className="mt-4 mb-16">
