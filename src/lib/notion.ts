@@ -20,7 +20,7 @@ class NotionAPI {
       database_id: process.env.NOTION_POST_LIST_DATABASE_KEY || "",
       filter: {
         property: "progress",
-        select: {
+        status: {
           equals: "Published",
         },
       },
@@ -55,7 +55,7 @@ class NotionAPI {
           },
           {
             property: "progress",
-            select: {
+            status: {
               equals: "Published",
             },
           },
