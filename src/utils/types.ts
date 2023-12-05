@@ -101,7 +101,13 @@ export type NotionDatabaseRowBaseType = {
   last_edited_time: string;
   created_by: NotionUserType;
   last_edited_by: NotionUserType;
-  cover: string | null;
+  cover: {
+    type: string;
+    file: {
+      url: string;
+      expiry_time: string;
+    };
+  };
   icon: null | string;
   parent: {
     type: string;
@@ -295,4 +301,10 @@ export type ImageType = {
     url: string;
   };
   type: string;
+};
+
+export type MappedBook = {
+  id: string;
+  title: string;
+  cover: string;
 };

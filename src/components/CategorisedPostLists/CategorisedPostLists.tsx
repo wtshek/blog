@@ -1,4 +1,5 @@
 import { NotionPostType } from "@/utils/types";
+import { getCategoryUrl, getPostUrl } from "@/utils/utilts";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -44,12 +45,12 @@ export const CategorisedPostList: FC<CategorisedPostListType> = ({
                 })}
                 key={post.id}
               >
-                <Link href={`/posts/${post.id}`}>
+                <Link href={getPostUrl(post.id)}>
                   {post.properties.title.title[0].plain_text}
                 </Link>
               </div>
             ))}
-            <Link href={`/categories/${category.name}`}>
+            <Link href={getCategoryUrl(category.name)}>
               <div className="underline mt-2 flex items-center">
                 View More <Image src={arrowIcon} alt="arrow-svg" />
               </div>

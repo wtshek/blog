@@ -1,4 +1,4 @@
-import { NotionPostType } from "@/utils/types";
+import { MappedBook, NotionPostType } from "@/utils/types";
 import { Client } from "@notionhq/client";
 
 class NotionAPI {
@@ -63,6 +63,29 @@ class NotionAPI {
       },
     });
     return posts as unknown as { results: NotionPostType[] };
+  };
+
+  public getAllBooks = async (): Promise<MappedBook[]> => {
+    const books = await this.notion.databases.query({
+      database_id: process.env.NOTION_POST_LIST_DATABASE_KEY || "",
+      filter: {
+        and: [
+          {
+            property: "type",
+            select: {
+              equals: "Book",
+            },
+          },
+        ],
+      },
+    });
+    return (books as unknown as { results: NotionPostType[] }).results.map(
+      (item: NotionPostType) => ({
+        id: item.id,
+        title: item.properties.title.title[0].plain_text,
+        cover: item.cover?.file.url || "",
+      })
+    );
   };
 }
 

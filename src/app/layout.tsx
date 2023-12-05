@@ -10,8 +10,9 @@ import twitter from "../../public/svg/twitter.svg";
 import "./globals.css";
 
 const menuItems = [
-  { key: "/home", label: "Home" },
+  { key: "/", label: "Home" },
   { key: "/posts", label: "Articles" },
+  { key: "/books", label: "Books" },
 ];
 
 const mappingMenuItems = () =>
@@ -52,7 +53,7 @@ export default function RootLayout({
             <div className="lg:max-w-[930px] m-auto flex flex-col lg:flex-row items-center justify-center lg:justify-between">
               <div>
                 <div className="mb-5">
-                  Wing Tung Shek 2023. All right reserved
+                  Wing Tung Shek {new Date().getFullYear()}. All right reserved
                 </div>
                 <div className="hidden lg:flex">{mappingMenuItems()}</div>
               </div>

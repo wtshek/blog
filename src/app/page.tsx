@@ -1,3 +1,4 @@
+import { BookCarousel } from "@/components/BookCarousel";
 import { CategorisedPostList } from "@/components/CategorisedPostLists";
 import { SubscriptionForm } from "@/components/SubscriptionForm";
 import notionAPI from "@/lib/notion";
@@ -9,6 +10,7 @@ const BreakLine = () => <hr className="bg-grey" />;
 
 export default async function Home() {
   const categorisedPostList = await notionAPI.getCategorizedPosts();
+  const bookList = await notionAPI.getAllBooks();
 
   return (
     <>
@@ -54,6 +56,9 @@ export default async function Home() {
         <BreakLine />
         <CategorisedPostList data={categorisedPostList} />
         <BreakLine />
+        <div className="hidden lg:block py-8">
+          <BookCarousel data={bookList} />
+        </div>
       </main>
     </>
   );
