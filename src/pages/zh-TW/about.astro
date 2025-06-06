@@ -1,7 +1,7 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import { getLangFromUrl, useTranslations } from '../i18n';
-import Layout from '../layouts/BlogPost.astro';
+import AboutHeroImage from '../../assets/blog-placeholder-about.jpg';
+import { getLangFromUrl, useTranslations } from '../../i18n';
+import Layout from '../../layouts/BlogPost.astro';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -15,7 +15,7 @@ const t = useTranslations(lang);
   category="personal"
   tags={['about', 'personal']}
   author="Blog Author"
-  language="en"
+  language="zh-TW"
   draft={false}
   featured={false}
 >

@@ -1,85 +1,435 @@
 ---
-import HeaderLink from './HeaderLink.astro';
 import { SITE_TITLE } from '../consts';
+import { getLangFromUrl, useTranslations } from '../i18n';
+import HeaderLink from './HeaderLink.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<header>
-	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="internal-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
-		</div>
-		<div class="social-links">
-			<a href="https://m.webtoo.ls/@astro" target="_blank">
-				<span class="sr-only">Follow Astro on Mastodon</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"
-					></path></svg
-				>
-			</a>
-			<a href="https://twitter.com/astrodotbuild" target="_blank">
-				<span class="sr-only">Follow Astro on Twitter</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
-					></path></svg
-				>
-			</a>
-			<a href="https://github.com/withastro/astro" target="_blank">
-				<span class="sr-only">Go to Astro's GitHub repo</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
-					><path
-						fill="currentColor"
-						d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
-					></path></svg
-				>
-			</a>
-		</div>
-	</nav>
-</header>
-<style>
-	header {
-		margin: 0;
-		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
-	}
-	h2 {
-		margin: 0;
-		font-size: 1em;
-	}
+<header class="sticky top-0 z-50 flex border-b-8 border-black bg-white py-5">
+  <div class="container mx-auto flex max-w-screen-xl px-4">
+    <div class="flex w-full items-center justify-between gap-10">
+      <!-- Logo Section -->
+      <div class="logo-section relative flex items-center gap-5">
+        <h1
+          class="relative z-10 m-0 text-xl font-black uppercase tracking-tight md:text-2xl lg:text-4xl"
+        >
+          <a
+            href={lang === 'en' ? '/' : `/${lang}/`}
+            class="text-black no-underline transition-all duration-300 hover:text-red-600"
+          >
+            {SITE_TITLE}
+          </a>
+        </h1>
+        <div
+          class="geometric-accent red absolute -right-4 -top-2 z-0 h-5 w-5 rotate-45 transform bg-red-600 transition-all duration-300"
+        >
+        </div>
+        <div
+          class="geometric-accent blue absolute -bottom-2 right-2 z-0 h-5 w-5 rounded-full bg-blue-600 transition-all duration-300"
+        >
+        </div>
+        <div
+          class="geometric-accent yellow absolute -right-8 top-1/2 z-0 h-7 w-3 -translate-y-1/2 transform bg-yellow-400 transition-all duration-300"
+        >
+        </div>
+      </div>
 
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-	}
-	nav {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
-		text-decoration: none;
-	}
-	nav a.active {
-		text-decoration: none;
-		border-bottom-color: var(--accent);
-	}
-	.social-links,
-	.social-links a {
-		display: flex;
-	}
-	@media (max-width: 720px) {
-		.social-links {
-			display: none;
-		}
-	}
+      <!-- Desktop Navigation -->
+      <nav class="hidden items-center gap-10 md:flex">
+        <HeaderLink href={lang === 'en' ? '/' : `/${lang}/`}>
+          {t('nav.home')}
+        </HeaderLink>
+        <HeaderLink href={lang === 'en' ? '/blog' : `/${lang}/blog`}>
+          {t('nav.blog')}
+        </HeaderLink>
+        <HeaderLink href={lang === 'en' ? '/about' : `/${lang}/about`}>
+          {t('nav.about')}
+        </HeaderLink>
+      </nav>
+
+      <!-- Desktop Language & Social Links -->
+      <div class="hidden items-center gap-5 md:flex">
+        <div class="flex gap-5">
+          <a
+            href="https://m.webtoo.ls/@astro"
+            target="_blank"
+            class="social-link relative flex h-10 w-10 items-center justify-center border-2 border-black text-black transition-all duration-300 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:transform hover:bg-black hover:text-white"
+          >
+            <span class="sr-only"> Follow Astro on Mastodon </span>
+            <svg
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+              width="24"
+              height="24"
+            >
+              <path
+                fill="currentColor"
+                d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"
+              >
+              </path>
+            </svg>
+          </a>
+          <a
+            href="https://twitter.com/astrodotbuild"
+            target="_blank"
+            class="social-link relative flex h-10 w-10 items-center justify-center border-2 border-black text-black transition-all duration-300 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:transform hover:bg-black hover:text-white"
+          >
+            <span class="sr-only"> Follow Astro on Twitter </span>
+            <svg
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+              width="24"
+              height="24"
+            >
+              <path
+                fill="currentColor"
+                d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
+              >
+              </path>
+            </svg>
+          </a>
+          <a
+            href="https://github.com/withastro/astro"
+            target="_blank"
+            class="social-link relative flex h-10 w-10 items-center justify-center border-2 border-black text-black transition-all duration-300 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:transform hover:bg-black hover:text-white"
+          >
+            <span class="sr-only"> Go to Astro's GitHub repo </span>
+            <svg
+              viewBox="0 0 16 16"
+              aria-hidden="true"
+              width="24"
+              height="24"
+            >
+              <path
+                fill="currentColor"
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+              >
+              </path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button
+        id="mobile-menu-button"
+        class="mobile-menu-button relative flex h-10 w-10 flex-col items-center justify-center border-2 border-black bg-white transition-all duration-300 hover:bg-red-600 hover:text-white md:hidden"
+        aria-label="Toggle mobile menu"
+      >
+        <span
+          class="hamburger-line hamburger-line-1 block h-0.5 w-6 bg-current transition-all duration-300"
+        >
+        </span>
+        <span
+          class="hamburger-line hamburger-line-2 mt-1.5 block h-0.5 w-6 bg-current transition-all duration-300"
+        >
+        </span>
+        <span
+          class="hamburger-line hamburger-line-3 mt-1.5 block h-0.5 w-6 bg-current transition-all duration-300"
+        >
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation Menu -->
+  <div
+    id="mobile-menu"
+    class="mobile-menu absolute left-0 right-0 top-full z-40 hidden border-x-8 border-b-8 border-black bg-white shadow-lg md:hidden"
+  >
+    <nav class="flex flex-col space-y-4 p-4">
+      <!-- Mobile Navigation Links -->
+      <div class="flex flex-col space-y-3 border-b-2 border-black pb-4">
+        <a
+          href={lang === 'en' ? '/' : `/${lang}/`}
+          class="mobile-nav-link block border-2 border-transparent px-4 py-3 text-lg font-bold uppercase tracking-wide text-black transition-all duration-300 hover:border-black hover:bg-red-600 hover:text-white"
+        >
+          {t('nav.home')}
+        </a>
+        <a
+          href={lang === 'en' ? '/blog' : `/${lang}/blog`}
+          class="mobile-nav-link block border-2 border-transparent px-4 py-3 text-lg font-bold uppercase tracking-wide text-black transition-all duration-300 hover:border-black hover:bg-red-600 hover:text-white"
+        >
+          {t('nav.blog')}
+        </a>
+        <a
+          href={lang === 'en' ? '/about' : `/${lang}/about`}
+          class="mobile-nav-link block border-2 border-transparent px-4 py-3 text-lg font-bold uppercase tracking-wide text-black transition-all duration-300 hover:border-black hover:bg-red-600 hover:text-white"
+        >
+          {t('nav.about')}
+        </a>
+      </div>
+
+      <!-- Mobile Language Switcher -->
+      <div class="flex flex-col space-y-3 border-b-2 border-black pb-4">
+        <p class="text-sm font-bold uppercase tracking-wider text-gray-600">
+          Language
+        </p>
+        <div class="flex gap-3">
+          <a
+            href="/"
+            class={`px-4 py-2 border-2 text-sm font-bold uppercase tracking-wide transition-all duration-300 hover:border-black hover:bg-yellow-400 ${lang === 'en' ? 'text-white bg-red-600 border-black' : 'text-black border-gray-300'}`}
+          >
+            English
+          </a>
+          <a
+            href="/zh-TW"
+            class={`px-4 py-2 border-2 text-sm font-bold uppercase tracking-wide transition-all duration-300 hover:border-black hover:bg-yellow-400 ${lang === 'zh-TW' ? 'text-white bg-red-600 border-black' : 'text-black border-gray-300'}`}
+          >
+            中文
+          </a>
+        </div>
+      </div>
+
+      <!-- Mobile Social Links -->
+      <div class="flex justify-center gap-4 pt-2">
+        <a
+          href="https://m.webtoo.ls/@astro"
+          target="_blank"
+          class="social-link-mobile flex h-12 w-12 items-center justify-center border-2 border-black text-black transition-all duration-300 hover:bg-red-600 hover:text-white"
+        >
+          <span class="sr-only"> Follow Astro on Mastodon </span>
+          <svg
+            viewBox="0 0 16 16"
+            aria-hidden="true"
+            width="20"
+            height="20"
+          >
+            <path
+              fill="currentColor"
+              d="M11.19 12.195c2.016-.24 3.77-1.475 3.99-2.603.348-1.778.32-4.339.32-4.339 0-3.47-2.286-4.488-2.286-4.488C12.062.238 10.083.017 8.027 0h-.05C5.92.017 3.942.238 2.79.765c0 0-2.285 1.017-2.285 4.488l-.002.662c-.004.64-.007 1.35.011 2.091.083 3.394.626 6.74 3.78 7.57 1.454.383 2.703.463 3.709.408 1.823-.1 2.847-.647 2.847-.647l-.06-1.317s-1.303.41-2.767.36c-1.45-.05-2.98-.156-3.215-1.928a3.614 3.614 0 0 1-.033-.496s1.424.346 3.228.428c1.103.05 2.137-.064 3.188-.189zm1.613-2.47H11.13v-4.08c0-.859-.364-1.295-1.091-1.295-.804 0-1.207.517-1.207 1.541v2.233H7.168V5.89c0-1.024-.403-1.541-1.207-1.541-.727 0-1.091.436-1.091 1.296v4.079H3.197V5.522c0-.859.22-1.541.66-2.046.456-.505 1.052-.764 1.793-.764.856 0 1.504.328 1.933.983L8 4.39l.417-.695c.429-.655 1.077-.983 1.934-.983.74 0 1.336.259 1.791.764.442.505.661 1.187.661 2.046v4.203z"
+            >
+            </path>
+          </svg>
+        </a>
+        <a
+          href="https://twitter.com/astrodotbuild"
+          target="_blank"
+          class="social-link-mobile flex h-12 w-12 items-center justify-center border-2 border-black text-black transition-all duration-300 hover:bg-blue-600 hover:text-white"
+        >
+          <span class="sr-only"> Follow Astro on Twitter </span>
+          <svg
+            viewBox="0 0 16 16"
+            aria-hidden="true"
+            width="20"
+            height="20"
+          >
+            <path
+              fill="currentColor"
+              d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
+            >
+            </path>
+          </svg>
+        </a>
+        <a
+          href="https://github.com/withastro/astro" 
+          target="_blank"
+          class="social-link-mobile flex h-12 w-12 items-center justify-center border-2 border-black text-black transition-all duration-300 hover:bg-yellow-400 hover:text-black"
+        >
+          <span class="sr-only"> Go to Astro's GitHub repo </span>
+          <svg
+            viewBox="0 0 16 16"
+            aria-hidden="true"
+            width="20"
+            height="20"
+          >
+            <path
+              fill="currentColor"
+              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+            >
+            </path>
+          </svg>
+        </a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Mobile menu functionality
+  document.addEventListener('DOMContentLoaded', function () {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    let isMenuOpen = false;
+
+    mobileMenuButton?.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      isMenuOpen = !isMenuOpen;
+      console.log('Menu toggle clicked, isMenuOpen:', isMenuOpen);
+
+      if (isMenuOpen) {
+        // Show menu
+        mobileMenu?.classList.remove('hidden');
+        mobileMenu?.classList.add('block');
+        mobileMenu?.classList.add('animate-slideDown');
+        mobileMenuButton?.classList.add('menu-open');
+        console.log('Showing menu');
+      } else {
+        // Hide menu
+        mobileMenu?.classList.add('hidden');
+        mobileMenu?.classList.remove('block');
+        mobileMenu?.classList.remove('animate-slideDown');
+        mobileMenuButton?.classList.remove('menu-open');
+        console.log('Hiding menu');
+      }
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function (event) {
+      const target = event.target as Node;
+      if (
+        isMenuOpen &&
+        !mobileMenuButton?.contains(target) &&
+        !mobileMenu?.contains(target)
+      ) {
+        isMenuOpen = false;
+        mobileMenu?.classList.add('hidden');
+        mobileMenu?.classList.remove('block');
+        mobileMenu?.classList.remove('animate-slideDown');
+        mobileMenuButton?.classList.remove('menu-open');
+      }
+    });
+
+    // Close menu when clicking on navigation links
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+    mobileNavLinks.forEach((link) => {
+      link.addEventListener('click', function () {
+        isMenuOpen = false;
+        mobileMenu?.classList.add('hidden');
+        mobileMenu?.classList.remove('block');
+        mobileMenu?.classList.remove('animate-slideDown');
+        mobileMenuButton?.classList.remove('menu-open');
+      });
+    });
+  });
+</script>
+
+<style>
+  .logo-section:hover .geometric-accent.red {
+    transform: rotate(45deg) scale(1.2);
+  }
+
+  /* Hamburger menu styling */
+  .hamburger-line {
+    transform-origin: center;
+    transition:
+      transform 0.3s ease,
+      opacity 0.3s ease;
+  }
+
+  /* Closed state (default) */
+  .mobile-menu-button .hamburger-line-1 {
+    transform: rotate(0deg) translate(0, 0);
+  }
+
+  .mobile-menu-button .hamburger-line-2 {
+    opacity: 1;
+    transform: rotate(0deg) translate(0, 0);
+  }
+
+  .mobile-menu-button .hamburger-line-3 {
+    transform: rotate(0deg) translate(0, 0);
+  }
+
+  /* Open state */
+  .mobile-menu-button.menu-open .hamburger-line-1 {
+    transform: rotate(45deg) translate(0, 6px);
+  }
+
+  .mobile-menu-button.menu-open .hamburger-line-2 {
+    opacity: 0;
+    transform: rotate(0deg) translate(0, 0);
+  }
+
+  .mobile-menu-button.menu-open .hamburger-line-3 {
+    transform: rotate(-45deg) translate(0, -6px);
+  }
+
+  .social-link::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: -3px;
+    bottom: -3px;
+    z-index: -1;
+    transition: all 0.3s ease;
+    opacity: 0;
+  }
+
+  .social-link:hover::after {
+    opacity: 1;
+  }
+
+  .social-link:nth-child(1)::after {
+    background: #ff0000;
+  }
+
+  .social-link:nth-child(2)::after {
+    background: #0066cc;
+  }
+
+  .social-link:nth-child(3)::after {
+    background: #ffcc00;
+  }
+
+  /* Mobile specific styles */
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slideDown {
+    animation: slideDown 0.3s ease-out;
+  }
+
+  /* Mobile menu positioning and styling */
+  .mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    margin-top: 8px;
+  }
+
+  /* Ensure mobile menu is visible when not hidden */
+  .mobile-menu:not(.hidden) {
+    display: block !important;
+  }
+
+  /* Mobile responsive adjustments */
+  @media (max-width: 768px) {
+    .logo-section .geometric-accent {
+      display: none;
+    }
+
+    .mobile-menu {
+      backdrop-filter: blur(10px);
+    }
+
+    .mobile-nav-link:active {
+      transform: scale(0.98);
+    }
+
+    .social-link-mobile:active {
+      transform: scale(0.95);
+    }
+  }
+
+  /* Ensure header positioning for mobile menu */
+  header {
+    position: relative;
+  }
 </style>

@@ -1,49 +1,253 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getLangFromUrl, useTranslations } from '../i18n';
+import Header from '@/components/Header.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+<html lang={lang}>
+  <head>
+    <BaseHead
+      title={SITE_TITLE}
+      description={SITE_DESCRIPTION}
+    />
+  </head>
+  <body>
+    <Header />
+    <main class="py-20">
+      <section
+        class="relative mx-auto mb-20 grid max-w-screen-xl grid-cols-1 items-center gap-20 px-4 lg:grid-cols-2"
+      >
+        <div class="hero-content relative">
+          <h1
+            class="hero-title mb-10 text-5xl font-black uppercase leading-tight text-black md:text-6xl lg:text-8xl"
+          >
+            {t('home.title')}
+          </h1>
+          <div
+            class="geometric-grid absolute -right-10 -top-5 -z-10 grid grid-cols-3 grid-rows-3 gap-5"
+          >
+            <div
+              class="grid-item red col-start-1 row-start-1 h-10 w-10 rotate-45 transform bg-red-600 transition-all duration-300"
+            >
+            </div>
+            <div
+              class="grid-item blue circle col-start-3 row-start-2 h-10 w-10 rounded-full bg-blue-600 transition-all duration-300"
+            >
+            </div>
+            <div
+              class="grid-item yellow col-start-2 row-start-3 h-14 w-6 justify-self-center bg-yellow-400 transition-all duration-300"
+            >
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-description relative">
+          <div
+            class="bauhaus-card relative m-5 border-4 border-black bg-white p-10 transition-all duration-300"
+          >
+            <p class="mb-10 text-xl font-medium leading-relaxed">
+              {t('home.welcome')}
+            </p>
+            <p class="mb-8 text-lg leading-relaxed">
+              {t('home.description')}
+            </p>
+            <a
+              href={lang === 'en' ? '/blog' : `/${lang}/blog`}
+              class="bauhaus-btn primary relative inline-block bg-red-600 px-10 py-5 text-sm font-bold uppercase tracking-wider text-white no-underline transition-all duration-300 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:transform hover:bg-blue-600"
+            >
+              {t('nav.blog')}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <div
+        class="bauhaus-divider mx-auto my-16 flex max-w-screen-xl items-center gap-5 px-4"
+      >
+      </div>
+
+      <section class="mx-auto my-20 max-w-screen-xl px-4">
+        <h2
+          class="mb-16 text-center text-4xl font-black uppercase text-black md:text-6xl"
+        >
+          {t('home.ideas')}
+        </h2>
+
+        <div
+          class="mt-16 grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3"
+        >
+          <div
+            class="bauhaus-card blue relative flex min-h-40 items-center justify-center border-4 border-black bg-white p-10 text-center transition-all duration-300"
+          >
+            <h3 class="relative z-10 text-xl font-bold uppercase tracking-wide">
+              {t('home.editPage')}
+            </h3>
+            <div
+              class="feature-accent red absolute -right-2 -top-2 z-0 h-16 w-16 rotate-45 transform bg-red-600 transition-all duration-300"
+            >
+            </div>
+          </div>
+
+          <div
+            class="bauhaus-card yellow relative flex min-h-40 items-center justify-center border-4 border-black bg-white p-10 text-center transition-all duration-300"
+          >
+            <h3 class="relative z-10 text-xl font-bold uppercase tracking-wide">
+              {t('home.editHeader')}
+            </h3>
+            <div
+              class="feature-accent blue absolute -right-2 -top-2 z-0 h-16 w-16 rounded-full bg-blue-600 transition-all duration-300"
+            >
+            </div>
+          </div>
+
+          <div
+            class="bauhaus-card relative flex min-h-40 items-center justify-center border-4 border-black bg-white p-10 text-center transition-all duration-300"
+          >
+            <h3 class="relative z-10 text-xl font-bold uppercase tracking-wide">
+              {t('home.editFooter')}
+            </h3>
+            <div
+              class="feature-accent yellow absolute -right-2 -top-2 z-0 h-20 w-10 bg-yellow-400 transition-all duration-300"
+            >
+            </div>
+          </div>
+
+          <div
+            class="bauhaus-card blue relative flex min-h-40 items-center justify-center border-4 border-black bg-white p-10 text-center transition-all duration-300"
+          >
+            <h3 class="relative z-10 text-xl font-bold uppercase tracking-wide">
+              {t('home.checkPosts')}
+            </h3>
+            <div
+              class="feature-accent red absolute -right-2 -top-2 z-0 h-16 w-16 rotate-45 transform bg-red-600 transition-all duration-300"
+            >
+            </div>
+          </div>
+
+          <div
+            class="bauhaus-card yellow relative flex min-h-40 items-center justify-center border-4 border-black bg-white p-10 text-center transition-all duration-300"
+          >
+            <h3 class="relative z-10 text-xl font-bold uppercase tracking-wide">
+              {t('home.customizeLayout')}
+            </h3>
+            <div
+              class="feature-accent blue absolute -right-2 -top-2 z-0 h-16 w-16 rounded-full bg-blue-600 transition-all duration-300"
+            >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div
+        class="bauhaus-divider mx-auto my-16 flex max-w-screen-xl items-center gap-5 px-4"
+      >
+      </div>
+
+      <section class="mx-auto my-20 max-w-screen-xl px-4 text-center">
+        <div
+          class="bauhaus-card relative border-4 border-black bg-white p-10 transition-all duration-300"
+        >
+          <h2 class="mb-8 text-4xl font-black uppercase text-black md:text-5xl">
+            {t('home.haveFun')}
+          </h2>
+          <p class="mb-10 text-xl font-medium leading-relaxed">
+            {t('home.morePersonality')}
+          </p>
+          <div
+            class="mt-10 flex flex-col items-center justify-center gap-10 md:flex-row"
+          >
+            <a
+              href={lang === 'en' ? '/about' : `/${lang}/about`}
+              class="bauhaus-btn secondary inline-block w-full max-w-xs border-4 border-black bg-white px-10 py-5 text-sm font-bold uppercase tracking-wider text-black no-underline transition-all duration-300 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:transform hover:bg-yellow-400 md:w-auto"
+            >
+              {t('nav.about')}
+            </a>
+            <a
+              href={lang === 'en' ? '/blog' : `/${lang}/blog`}
+              class="bauhaus-btn primary inline-block w-full max-w-xs bg-red-600 px-10 py-5 text-sm font-bold uppercase tracking-wider text-white no-underline transition-all duration-300 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:transform hover:bg-blue-600 md:w-auto"
+            >
+              {t('nav.blog')}
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
 </html>
+
+<style>
+  /* Keep complex animations and pseudo-elements that can't be easily replicated with Tailwind */
+  .hero-title:hover + .geometric-grid .grid-item {
+    transform: scale(1.1) rotate(45deg);
+  }
+
+  .hero-title:hover + .geometric-grid .grid-item.circle {
+    transform: scale(1.1);
+    border-radius: 0;
+  }
+
+  .bauhaus-card::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: -8px;
+    bottom: -8px;
+    background: #ff0000;
+    z-index: -1;
+    transition: all 0.3s ease;
+  }
+
+  .bauhaus-card:hover::after {
+    background: #0066cc;
+    transform: translate(4px, 4px);
+  }
+
+  .bauhaus-card.blue::after {
+    background: #0066cc;
+  }
+
+  .bauhaus-card.yellow::after {
+    background: #ffcc00;
+  }
+
+  .bauhaus-card:hover .feature-accent {
+    transform: scale(1.2) rotate(45deg);
+  }
+
+  .bauhaus-card:hover .feature-accent.blue {
+    transform: scale(1.2);
+    border-radius: 0;
+  }
+
+  .bauhaus-divider::before,
+  .bauhaus-divider::after {
+    content: '';
+    flex: 1;
+    height: 4px;
+    background: #000000;
+  }
+
+  .bauhaus-divider::before {
+    background: #ff0000;
+  }
+
+  .bauhaus-divider::after {
+    background: #0066cc;
+  }
+
+  .bauhaus-btn:hover {
+    box-shadow: 4px 4px 0 #000000;
+  }
+
+  .bauhaus-btn.secondary:hover {
+    box-shadow: 4px 4px 0 #000000;
+  }
+</style>
