@@ -55,11 +55,35 @@ export default {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        // Bauhaus colors
+        bauhaus: {
+          red: 'var(--bauhaus-red)',
+          blue: 'var(--bauhaus-blue)',
+          yellow: 'var(--bauhaus-yellow)',
+          black: 'var(--bauhaus-black)',
+          white: 'var(--bauhaus-white)',
+          gray: 'var(--bauhaus-gray)',
+          'dark-gray': 'var(--bauhaus-dark-gray)',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      keyframes: {
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
       typography: {
         DEFAULT: {
@@ -77,5 +101,5 @@ export default {
       },
     },
   },
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 };

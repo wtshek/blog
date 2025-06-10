@@ -1,0 +1,155 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../../../../components/FormattedDate.astro';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog');
+  const tags = [...new Set(blogEntries.flatMap((entry) => entry.data.tags || []))];
+  const languages = ['en', 'zh-TW'];
+  
+  const paths = [];
+  
+  for (const lang of languages) {
+    for (const tag of tags) {
+      paths.push({
+        params: { lang, tag },
+        props: { tag, lang }
+      });
+    }
+  }
+  
+  return paths;
+}
+
+const { tag, lang } = Astro.props;
+
+// Get all blog posts for this tag and language
+const allPosts = await getCollection('blog');
+const tagPosts = allPosts
+  .filter(post => 
+    post.data.tags?.includes(tag) && 
+    post.data.language === lang
+  )
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const tagName = tag.charAt(0).toUpperCase() + tag.slice(1);
+const pageTitle = lang === 'zh-TW' ? `#${tag} 標籤` : `#${tag} Tag`;
+const pageDescription = lang === 'zh-TW' 
+  ? `瀏覽所有標記為 ${tag} 的文章` 
+  : `Browse all posts tagged with ${tag}`;
+
+// Breadcrumb data
+const breadcrumbs = [
+  { name: lang === 'zh-TW' ? '首頁' : 'Home', href: `/${lang === 'en' ? '' : lang}` },
+  { name: lang === 'zh-TW' ? '部落格' : 'Blog', href: `/${lang === 'en' ? '' : lang}/blog` },
+  { name: `#${tag}`, href: null }
+];
+---
+
+<BaseLayout 
+  title={pageTitle}
+  description={pageDescription}
+  type="blog"
+  lang={lang}
+>
+  <!-- Breadcrumb Navigation -->
+  <Breadcrumb items={breadcrumbs} />
+
+  <div class="container mx-auto px-4 py-8 max-w-6xl">
+    <!-- Page Header -->
+    <header class="mb-12 text-center">
+      <h1 class="text-4xl md:text-5xl font-black mb-6 text-bauhaus-black">
+        {pageTitle}
+      </h1>
+      <p class="text-lg text-bauhaus-dark-gray max-w-2xl mx-auto">
+        {pageDescription}
+      </p>
+      <div class="mt-6">
+        <span class="inline-block rounded-full bg-bauhaus-yellow px-4 py-2 text-sm font-semibold text-bauhaus-black">
+          {tagPosts.length} {lang === 'zh-TW' ? '篇文章' : 'posts'}
+        </span>
+      </div>
+    </header>
+
+    <!-- Posts Grid -->
+    {tagPosts.length > 0 ? (
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {tagPosts.map((post) => (
+          <article class="group bg-white border-4 border-black shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+            {post.data.heroImage && (
+              <div class="aspect-video overflow-hidden">
+                <Image
+                  src={post.data.heroImage}
+                  alt={`Cover image for ${post.data.title}`}
+                  width={400}
+                  height={225}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-3 text-sm text-bauhaus-dark-gray">
+                <FormattedDate date={post.data.pubDate} />
+                <span class="inline-block rounded-full bg-bauhaus-blue px-2 py-1 text-xs text-white">
+                  {post.data.category}
+                </span>
+              </div>
+              
+              <h2 class="text-xl font-bold mb-3 text-bauhaus-black group-hover:text-bauhaus-blue transition-colors duration-200">
+                <a href={`/${lang === 'en' ? '' : lang}/blog/${post.id}`} class="block">
+                  {post.data.title}
+                </a>
+              </h2>
+              
+              <p class="text-bauhaus-dark-gray mb-4 line-clamp-3 leading-relaxed">
+                {post.data.description}
+              </p>
+              
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="flex flex-wrap gap-1 mb-4">
+                  {post.data.tags.map(postTag => (
+                    <span 
+                      class={`inline-block rounded-full px-2 py-1 text-xs ${
+                        postTag === tag 
+                          ? 'bg-bauhaus-yellow text-bauhaus-black font-semibold' 
+                          : 'bg-bauhaus-light-gray text-bauhaus-black'
+                      }`}
+                    >
+                      #{postTag}
+                    </span>
+                  ))}
+                </div>
+              )}
+              
+              <a 
+                href={`/${lang === 'en' ? '' : lang}/blog/${post.id}`} 
+                class="inline-flex items-center text-bauhaus-blue hover:text-bauhaus-red font-medium transition-colors duration-200"
+              >
+                {lang === 'zh-TW' ? '閱讀更多' : 'Read more'}
+                <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-12">
+        <p class="text-xl text-bauhaus-dark-gray">
+          {lang === 'zh-TW' ? '此標籤目前沒有文章' : 'No posts found with this tag'}
+        </p>
+        <a 
+          href={`/${lang === 'en' ? '' : lang}/blog`} 
+          class="inline-block mt-4 px-6 py-3 bg-bauhaus-blue text-white font-semibold rounded hover:bg-bauhaus-red transition-colors duration-200"
+        >
+          {lang === 'zh-TW' ? '瀏覽所有文章' : 'Browse all posts'}
+        </a>
+      </div>
+    )}
+  </div>
+</BaseLayout> 

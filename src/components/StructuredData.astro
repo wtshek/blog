@@ -1,0 +1,120 @@
+---
+
+interface Props {
+  type: 'website' | 'article' | 'blog';
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+  author?: string;
+  publishedDate?: Date;
+  modifiedDate?: Date;
+  category?: string;
+  tags?: string[];
+}
+
+const {
+  type,
+  title,
+  description,
+  url,
+  image,
+  author = 'WT SHEK',
+  publishedDate,
+  modifiedDate,
+  category,
+  tags = []
+} = Astro.props;
+
+const baseUrl = Astro.site?.toString() || 'https://wtshek.com';
+
+let structuredData: any = {
+  '@context': 'https://schema.org',
+  '@type': type === 'article' ? 'BlogPosting' : type === 'blog' ? 'Blog' : 'WebSite',
+  name: title,
+  headline: title,
+  description: description,
+  url: url,
+  author: {
+    '@type': 'Person',
+    name: author,
+    url: baseUrl
+  }
+};
+
+if (type === 'website') {
+  structuredData.potentialAction = {
+    '@type': 'SearchAction',
+    target: `${baseUrl}/search?q={search_term_string}`,
+    'query-input': 'required name=search_term_string'
+  };
+}
+
+if (type === 'article' || type === 'blog') {
+  structuredData.publisher = {
+    '@type': 'Person',
+    name: author,
+    url: baseUrl
+  };
+  
+  if (publishedDate) {
+    structuredData.datePublished = publishedDate.toISOString();
+  }
+  
+  if (modifiedDate) {
+    structuredData.dateModified = modifiedDate.toISOString();
+  }
+  
+  if (category) {
+    structuredData.articleSection = category;
+  }
+  
+  if (tags.length > 0) {
+    structuredData.keywords = tags.join(', ');
+  }
+}
+
+if (image) {
+  structuredData.image = {
+    '@type': 'ImageObject',
+    url: image.startsWith('http') ? image : `${baseUrl}${image}`,
+    width: 1200,
+    height: 630
+  };
+}
+
+// Add breadcrumb for articles
+if (type === 'article' && category) {
+  structuredData.breadcrumb = {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: baseUrl
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: `${baseUrl}/blog`
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: category.charAt(0).toUpperCase() + category.slice(1),
+        item: `${baseUrl}/blog/category/${category}`
+      },
+      {
+        '@type': 'ListItem',
+        position: 4,
+        name: title,
+        item: url
+      }
+    ]
+  };
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} /> 

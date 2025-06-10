@@ -2,7 +2,10 @@
 // You can import this data from anywhere in your site by using the `import` keyword.
 
 export const SITE_TITLE = "WT SHEK";
-export const SITE_DESCRIPTION = 'Welcome to Shek\'s blog!';
+export const SITE_DESCRIPTION = 'Personal blog by WT Shek covering technology, programming, design, and insights. Explore articles about web development, software engineering, and digital innovation.';
+
+// Google Analytics ID
+export const GA_TRACKING_ID = "G-XXXXXXXXXX"; // Replace with your actual GA4 tracking ID
 
 // Social Media Links and Icons
 export interface SocialLink {

@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://wtshek.com/sitemap-index.xml
+
+# Block access to admin and API routes
+Disallow: /api/
+Disallow: /_astro/
+
+# Allow Google and Bing bots access to CSS and JS files for better crawling
+User-agent: Googlebot
+Allow: /_astro/*.css
+Allow: /_astro/*.js
+
+User-agent: Bingbot
+Allow: /_astro/*.css
+Allow: /_astro/*.js 

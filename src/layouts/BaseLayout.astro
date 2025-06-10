@@ -3,20 +3,51 @@ import BaseHead from '@/components/BaseHead.astro';
 import Footer from '@/components/Footer.astro';
 import Header from '@/components/Header.astro';
 import '@/styles/global.css';
+import type { ImageMetadata } from 'astro';
 
 export interface Props {
   lang?: string;
+  title?: string;
+  description?: string;
+  image?: ImageMetadata;
+  publishedDate?: Date;
+  modifiedDate?: Date;
+  author?: string;
+  category?: string;
+  tags?: string[];
+  type?: 'website' | 'article' | 'blog';
+  includeFooter?: boolean;
 }
 
 const { 
   lang = 'en',
+  title,
+  description,
+  image,
+  publishedDate,
+  modifiedDate,
+  author,
+  category,
+  tags,
+  type,
+  includeFooter = true,
 } = Astro.props;
 ---
 
 <!doctype html>
 <html lang={lang}>
   <head>
-    <BaseHead/>
+    <BaseHead
+      title={title}
+      description={description}
+      image={image}
+      publishedDate={publishedDate}
+      modifiedDate={modifiedDate}
+      author={author}
+      category={category}
+      tags={tags}
+      type={type}
+    />
   </head>
   <body>
     <div class="relative flex min-h-screen flex-col">
@@ -24,7 +55,7 @@ const {
       <main class="flex-1">
         <slot />
       </main>
-      <Footer />
+      {includeFooter && <Footer />}
     </div>
   </body>
 </html>

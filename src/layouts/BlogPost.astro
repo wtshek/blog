@@ -1,51 +1,163 @@
 ---
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
+import Breadcrumb from '../components/Breadcrumb.astro';
 import FormattedDate from '../components/FormattedDate.astro';
+import { calculateReadingTime, formatReadingTime } from '../lib/readingTime';
 import BaseLayout from './BaseLayout.astro';
 
-type Props = CollectionEntry<'blog'>['data'];
+type Props = CollectionEntry<'blog'>['data'] & {
+  content?: string;
+};
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, category, tags, author, language, content } = Astro.props;
+
+// Calculate reading time if content is provided
+const readingTime = content ? calculateReadingTime(content) : undefined;
+const formattedReadingTime = readingTime ? formatReadingTime(readingTime, language as 'en' | 'zh-TW') : undefined;
+
+// Breadcrumb data
+const breadcrumbs = [
+  { name: language === 'zh-TW' ? '首頁' : 'Home', href: '/' },
+  { name: language === 'zh-TW' ? '部落格' : 'Blog', href: '/blog' },
+  { name: title, href: null }
+];
 ---
 
 <BaseLayout 
   title={title} 
   description={description}
+  image={heroImage}
+  publishedDate={pubDate}
+  modifiedDate={updatedDate}
+  author={author}
+  category={category}
+  tags={tags}
+  type="article"
   includeFooter={true}
 >
+  <!-- Breadcrumb Navigation -->
+
+
   <div class="w-full px-4">
-    <article>
-      <div class="w-full">
+    <article class="max-w-4xl mx-auto">
+      <Breadcrumb items={breadcrumbs} className="my-2" />
+      <!-- Hero Image -->
+      <div class="w-full mb-8">
         {
           heroImage && (
             <Image
               width={1020}
               height={510}
               src={heroImage}
-              alt=""
-              class="mx-auto block max-w-5xl mt-4 rounded-lg border-4 border-black shadow-lg"
+              alt={`Cover image for ${title}`}
+              class="mx-auto block w-full max-w-5xl rounded-lg border-4 border-black shadow-lg"
+              loading="eager"
+              decoding="async"
             />
           )
         }
       </div>
-      <div class="mx-auto w-full max-w-5xl">
-        <div class="py-4 text-center leading-tight">
-          <div class="mb-2 text-gray-600">
+
+      <!-- Article Header -->
+      <header class="mb-8 text-center leading-tight">
+        <div class="mb-4 text-bauhaus-dark-gray">
+          <div class="flex items-center justify-center space-x-4 text-sm">
             <FormattedDate date={pubDate} />
-            {
-              updatedDate && (
-                <div class="italic">
-                  Last updated on <FormattedDate date={updatedDate} />
-                </div>
-              )
-            }
+            {formattedReadingTime && (
+              <>
+                <span>•</span>
+                <span>{formattedReadingTime}</span>
+              </>
+            )}
+            {author && (
+              <>
+                <span>•</span>
+                <span>{language === 'zh-TW' ? '作者' : 'By'} {author}</span>
+              </>
+            )}
           </div>
-          <h1 class="my-2 text-4xl font-black">{title}</h1>
-          <hr class="border-t-2 border-black" />
+          {
+            updatedDate && (
+              <div class="mt-2 text-xs italic">
+                {language === 'zh-TW' ? '最後更新於' : 'Last updated on'} <FormattedDate date={updatedDate} />
+              </div>
+            )
+          }
         </div>
+        
+        <h1 class="my-4 text-4xl font-black leading-tight md:text-5xl">{title}</h1>
+        
+        {description && (
+          <p class="mx-auto mb-4 max-w-2xl text-lg text-bauhaus-dark-gray leading-relaxed">
+            {description}
+          </p>
+        )}
+
+        <!-- Category and Tags -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mb-4">
+          <span class="inline-block rounded-full bg-bauhaus-blue px-3 py-1 text-xs font-semibold text-white">
+            {category}
+          </span>
+          {tags && tags.map(tag => (
+            <span class="inline-block rounded-full bg-bauhaus-gray px-3 py-1 text-xs font-medium text-bauhaus-black border border-bauhaus-black">
+              #{tag}
+            </span>
+          ))}
+        </div>
+        
+        <hr class="border-t-2 border-black" />
+      </header>
+
+      <!-- Article Content -->
+      <div class="prose prose-lg max-w-none content-typography">
         <slot />
       </div>
+
+      <!-- Article Footer -->
+      <footer class="mt-12 pt-8 border-t-2 border-bauhaus-gray">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="text-sm text-bauhaus-dark-gray">
+            <p>
+              {language === 'zh-TW' ? '發布於' : 'Published on'} <FormattedDate date={pubDate} />
+              {updatedDate && (
+                <span>
+                  {language === 'zh-TW' ? '，更新於' : ', updated on'} <FormattedDate date={updatedDate} />
+                </span>
+              )}
+            </p>
+            {author && (
+              <p class="mt-1">
+                {language === 'zh-TW' ? '作者：' : 'Author: '}{author}
+              </p>
+            )}
+          </div>
+          
+          <div class="flex flex-wrap gap-2">
+            <span class="text-sm text-bauhaus-dark-gray">
+              {language === 'zh-TW' ? '分享：' : 'Share:'}
+            </span>
+            <a 
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(Astro.url.toString())}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-bauhaus-blue hover:text-bauhaus-red transition-colors duration-200"
+              aria-label={language === 'zh-TW' ? '在 Twitter 上分享' : 'Share on Twitter'}
+            >
+              Twitter
+            </a>
+            <a 
+              href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.toString())}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-bauhaus-blue hover:text-bauhaus-red transition-colors duration-200"
+              aria-label={language === 'zh-TW' ? '在 LinkedIn 上分享' : 'Share on LinkedIn'}
+            >
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </footer>
     </article>
   </div>
 </BaseLayout>
