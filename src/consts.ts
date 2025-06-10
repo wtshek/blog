@@ -5,7 +5,7 @@ export const SITE_TITLE = "WT SHEK";
 export const SITE_DESCRIPTION = 'Personal blog by WT Shek covering technology, programming, design, and insights. Explore articles about web development, software engineering, and digital innovation.';
 
 // Google Analytics ID
-export const GA_TRACKING_ID = "G-XXXXXXXXXX"; // Replace with your actual GA4 tracking ID
+export const GA_TRACKING_ID = "G-L8621CH7BM"; // Replace with your actual GA4 tracking ID
 
 // Social Media Links and Icons
 export interface SocialLink {
