@@ -1,0 +1,25 @@
+---
+import { SOCIAL_LINKS } from '../consts.ts';
+import { getLangFromUrl } from '../i18n';
+import SocialIcon from './SocialIcon.astro';
+
+export interface Props {
+  variant?: 'header' | 'footer' | 'mobile';
+}
+
+const { variant = 'header' } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const socialLinks = SOCIAL_LINKS[lang] || SOCIAL_LINKS.en;
+---
+
+{socialLinks.map(link => (
+  <SocialIcon
+    name={link.name}
+    url={link.url}
+    ariaLabel={link.ariaLabel}
+    color={link.color}
+    variant={variant}
+  >
+    <div set:html={link.svgContent} />
+  </SocialIcon>
+))} 

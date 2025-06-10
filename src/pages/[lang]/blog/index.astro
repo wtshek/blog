@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
-import BlogIndexPage from '../../components/pages/BlogIndexPage.astro';
-import { getLangFromUrl, useTranslations } from '../../i18n';
+import BlogIndexPage from '../../../components/pages/BlogIndexPage.astro';
+import { getLangFromUrl, useTranslations } from '../../../i18n';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);

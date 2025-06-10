@@ -1,0 +1,97 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<BaseLayout>
+  <div class="py-20">
+    <section
+      class="relative mx-auto mb-20 grid max-w-screen-xl grid-cols-1 items-center gap-x-20 gap-y-10 px-4 lg:grid-cols-2"
+    >
+      <div class="hero-content relative">
+        <h1
+          class="hero-title text-5xl font-black uppercase leading-tight text-black md:text-6xl lg:text-8xl"
+          set:html={t('home.title')}
+        >
+        </h1>
+        <div
+          class="geometric-grid absolute -right-10 -top-5 -z-10 grid grid-cols-3 grid-rows-3 gap-5"
+        >
+          <div
+            class="grid-item red col-start-1 row-start-1 h-10 w-10 rotate-45 transform bg-red-600 transition-all duration-300 hover:scale-110"
+          >
+          </div>
+          <div
+            class="grid-item blue circle col-start-3 row-start-2 h-10 w-10 rounded-full bg-blue-600 transition-all duration-300 hover:scale-110"
+          >
+          </div>
+          <div
+            class="grid-item yellow col-start-2 row-start-3 h-14 w-6 justify-self-center bg-yellow-400 transition-all duration-300 hover:scale-110"
+          >
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-description relative">
+        <div
+          class="bauhaus-card relative m-5 border-4 border-black bg-white p-10 text-xl font-medium leading-relaxed"
+          set:html={t('home.welcome')}
+        >
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Complex hover effects that require custom CSS */
+  .hero-title:hover + .geometric-grid .grid-item {
+    transform: scale(1.1) rotate(45deg);
+  }
+
+  .hero-title:hover + .geometric-grid .grid-item.circle {
+    transform: scale(1.1);
+    border-radius: 0;
+  }
+
+  /* Bauhaus shadow effects using pseudo-elements */
+  .bauhaus-card::after,
+  .bauhaus-btn::after {
+    content: '';
+    position: absolute;
+    background: #000;
+    z-index: -1;
+    transition: all 0.3s ease;
+  }
+
+  .bauhaus-card::after {
+    top: 8px;
+    left: 8px;
+    right: -8px;
+    bottom: -8px;
+  }
+
+  .bauhaus-card:hover::after {
+    top: 4px;
+    left: 4px;
+    right: -4px;
+    bottom: -4px;
+  }
+
+  .bauhaus-btn::after {
+    top: 4px;
+    left: 4px;
+    right: -4px;
+    bottom: -4px;
+  }
+
+  .bauhaus-btn:hover::after {
+    top: 2px;
+    left: 2px;
+    right: -2px;
+    bottom: -2px;
+  }
+</style> 

@@ -1,9 +1,11 @@
 /*
   Bauhaus-inspired Blog Design
   Based on Bauhaus design principles: geometric forms, primary colors, grid systems
+  Enhanced with readable typography for blog content
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -82,8 +84,9 @@
   --bauhaus-yellow: #ffcc00;
   --bauhaus-black: #000000;
   --bauhaus-white: #ffffff;
-  --bauhaus-gray: #f5f5f5;
-  --bauhaus-dark-gray: #333333;
+  --bauhaus-gray: #f8f9fa;
+  --bauhaus-dark-gray: #6c757d;
+  --bauhaus-light-gray: #e9ecef;
 
   /* Geometric spacing */
   --grid-unit: 20px;
@@ -91,11 +94,36 @@
   --grid-unit-3: 60px;
   --grid-unit-4: 80px;
 
-  /* Typography */
-  --font-display:
-    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-body:
-    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* Typography Scale */
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-reading: 'Crimson Text', Georgia, 'Times New Roman', serif;
+  
+  /* Readable Typography Scale */
+  --text-xs: 0.75rem;      /* 12px */
+  --text-sm: 0.875rem;     /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg: 1.125rem;     /* 18px */
+  --text-xl: 1.25rem;      /* 20px */
+  --text-2xl: 1.5rem;      /* 24px */
+  --text-3xl: 1.875rem;    /* 30px */
+  --text-4xl: 2.25rem;     /* 36px */
+  --text-5xl: 3rem;        /* 48px */
+  --text-6xl: 3.75rem;     /* 60px */
+  
+  /* Display Typography Scale (for hero sections, etc.) */
+  --display-sm: 2.25rem;   /* 36px */
+  --display-md: 2.875rem;  /* 46px */
+  --display-lg: 3.5rem;    /* 56px */
+  --display-xl: 4.5rem;    /* 72px */
+  --display-2xl: 6rem;     /* 96px */
+  
+  /* Line Heights */
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
 }
 
 /* Reset and Base Styles */
@@ -108,7 +136,8 @@
 html {
   font-family: var(--font-body);
   font-size: 16px;
-  line-height: 1.5;
+  line-height: var(--leading-normal);
+  scroll-behavior: smooth;
 }
 
 body {
@@ -117,49 +146,182 @@ body {
   font-family: var(--font-body);
   font-weight: 400;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Typography - Bauhaus Style */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+/* Display Typography - For hero sections, landing pages */
+.display-typography h1,
+.display-typography h2,
+.display-typography h3,
+.display-typography h4,
+.display-typography h5,
+.display-typography h6 {
   font-family: var(--font-display);
   font-weight: 900;
-  line-height: 1.1;
+  line-height: var(--leading-tight);
   letter-spacing: -0.02em;
   margin: 0;
+  text-transform: uppercase;
+}
+
+.display-typography h1 {
+  font-size: clamp(var(--display-md), 8vw, var(--display-2xl));
+}
+
+.display-typography h2 {
+  font-size: clamp(var(--display-sm), 6vw, var(--display-xl));
+}
+
+.display-typography h3 {
+  font-size: clamp(var(--text-3xl), 4vw, var(--display-lg));
+}
+
+/* Content Typography - For blog posts and readable content */
+.content-typography,
+.prose {
+  font-family: var(--font-reading);
+  line-height: var(--leading-relaxed);
+  color: #2d3748;
+  max-width: 65ch;
+}
+
+.content-typography h1,
+.prose h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  line-height: var(--leading-tight);
+  margin: 0 0 1.5rem 0;
+  color: var(--bauhaus-black);
+}
+
+.content-typography h2,
+.prose h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  margin: 2.5rem 0 1rem 0;
+  color: var(--bauhaus-black);
+  position: relative;
+}
+
+.content-typography h2::after,
+.prose h2::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 0;
+  width: 3rem;
+  height: 3px;
+  background: var(--bauhaus-red);
+}
+
+.content-typography h3,
+.prose h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  line-height: var(--leading-snug);
+  margin: 2rem 0 0.75rem 0;
+  color: var(--bauhaus-black);
+}
+
+.content-typography h4,
+.prose h4 {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: var(--leading-snug);
+  margin: 1.5rem 0 0.5rem 0;
+  color: var(--bauhaus-black);
+}
+
+.content-typography h5,
+.prose h5 {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  line-height: var(--leading-snug);
+  margin: 1.25rem 0 0.5rem 0;
+  color: var(--bauhaus-black);
+}
+
+.content-typography h6,
+.prose h6 {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+  line-height: var(--leading-snug);
+  margin: 1rem 0 0.5rem 0;
+  color: var(--bauhaus-dark-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.content-typography p,
+.prose p {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  margin-bottom: 1.5rem;
+  color: #4a5568;
+}
+
+.content-typography p:last-child,
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+/* Base Typography - Fallback for elements without specific context */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: var(--leading-snug);
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--bauhaus-black);
 }
 
 h1 {
-  font-size: clamp(2.5rem, 8vw, 6rem);
-  font-weight: 900;
-  text-transform: uppercase;
+  font-size: var(--text-4xl);
+  font-weight: 800;
+  margin-bottom: 1rem;
 }
 
 h2 {
-  font-size: clamp(2rem, 6vw, 4rem);
-  font-weight: 800;
-  text-transform: uppercase;
+  font-size: var(--text-3xl);
+  margin-bottom: 0.875rem;
 }
 
 h3 {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  font-weight: 700;
+  font-size: var(--text-2xl);
+  margin-bottom: 0.75rem;
 }
 
 h4 {
-  font-size: clamp(1.25rem, 3vw, 2rem);
+  font-size: var(--text-xl);
+  margin-bottom: 0.625rem;
+}
+
+h5 {
+  font-size: var(--text-lg);
+  margin-bottom: 0.5rem;
+}
+
+h6 {
+  font-size: var(--text-base);
+  margin-bottom: 0.5rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 p {
-  font-size: 1.125rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  font-weight: 400;
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  margin-bottom: 1rem;
+  color: #4a5568;
 }
 
 /* Links */
@@ -173,19 +335,35 @@ a {
 a:hover {
   color: var(--bauhaus-red);
   text-decoration: underline;
-  text-decoration-thickness: 3px;
-  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
 }
 
-/* Main Layout Grid */
-main {
+.content-typography a,
+.prose a {
+  color: var(--bauhaus-blue);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: all 0.2s ease;
+}
+
+.content-typography a:hover,
+.prose a:hover {
+  color: var(--bauhaus-red);
+  text-decoration-thickness: 2px;
+}
+
+
+/* Article Layout for Blog Posts */
+.article-layout {
   display: grid;
-  grid-template-columns: 1fr min(1200px, 90%) 1fr;
-  grid-column-gap: var(--grid-unit);
-  min-height: calc(100vh - 200px);
+  grid-template-columns: 1fr min(75ch, 90%) 1fr;
+  grid-column-gap: var(--grid-unit-2);
+  margin: var(--grid-unit-3) 0;
 }
 
-main > * {
+.article-layout > * {
   grid-column: 2;
 }
 
@@ -248,6 +426,22 @@ main > * {
   background: var(--bauhaus-yellow);
 }
 
+/* Subtle Card for Content */
+.content-card {
+  background: var(--bauhaus-white);
+  border: 1px solid var(--bauhaus-light-gray);
+  border-radius: 8px;
+  padding: var(--grid-unit-2);
+  margin: var(--grid-unit) 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.content-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
 /* Bauhaus Buttons */
 .bauhaus-btn {
   display: inline-block;
@@ -262,6 +456,7 @@ main > * {
   transition: all 0.3s ease;
   position: relative;
   text-decoration: none;
+  font-size: var(--text-sm);
 }
 
 .bauhaus-btn:hover {
@@ -291,6 +486,28 @@ main > * {
   box-shadow: 4px 4px 0 var(--bauhaus-black);
 }
 
+/* Subtle Button for Content */
+.content-btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--bauhaus-blue);
+  color: var(--bauhaus-white);
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-size: var(--text-base);
+}
+
+.content-btn:hover {
+  background: var(--bauhaus-red);
+  color: var(--bauhaus-white);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 /* Geometric Dividers */
 .bauhaus-divider {
   margin: var(--grid-unit-3) 0;
@@ -315,6 +532,13 @@ main > * {
   background: var(--bauhaus-blue);
 }
 
+/* Content Divider */
+.content-divider {
+  margin: var(--grid-unit-3) 0;
+  height: 1px;
+  background: var(--bauhaus-light-gray);
+}
+
 /* Lists */
 ul {
   list-style: none;
@@ -325,8 +549,8 @@ ul li {
   position: relative;
   padding-left: var(--grid-unit-2);
   margin-bottom: var(--grid-unit);
-  font-size: 1.125rem;
-  line-height: 1.6;
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
 }
 
 ul li::before {
@@ -351,23 +575,70 @@ ul li:nth-child(3n)::before {
   transform: rotate(45deg);
 }
 
+/* Content Lists - More readable */
+.content-typography ul,
+.prose ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 1.5rem 0;
+}
+
+.content-typography ul li,
+.prose ul li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: #4a5568;
+}
+
+.content-typography ul li::before,
+.prose ul li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--bauhaus-red);
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+.content-typography ol,
+.prose ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.content-typography ol li,
+.prose ol li {
+  margin-bottom: 0.75rem;
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: #4a5568;
+}
+
 /* Code Blocks */
 code {
   background: var(--bauhaus-gray);
   color: var(--bauhaus-black);
-  padding: 0.25em 0.5em;
-  font-family: 'Monaco', 'Consolas', monospace;
-  font-size: 0.9em;
-  border: 2px solid var(--bauhaus-black);
+  padding: 0.2em 0.4em;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 0.875em;
+  border-radius: 3px;
+  border: 1px solid var(--bauhaus-light-gray);
 }
 
 pre {
-  background: var(--bauhaus-black);
-  color: var(--bauhaus-white);
+  background: #1a202c;
+  color: #e2e8f0;
   padding: var(--grid-unit-2);
-  margin: var(--grid-unit) 0;
-  border: 4px solid var(--bauhaus-red);
+  margin: var(--grid-unit-2) 0;
+  border-radius: 8px;
   overflow-x: auto;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
 }
 
 pre code {
@@ -375,37 +646,82 @@ pre code {
   color: inherit;
   padding: 0;
   border: none;
+  border-radius: 0;
+  font-size: inherit;
 }
 
 /* Blockquotes */
 blockquote {
-  border-left: 8px solid var(--bauhaus-red);
+  border-left: 4px solid var(--bauhaus-red);
   background: var(--bauhaus-gray);
   padding: var(--grid-unit-2);
   margin: var(--grid-unit-2) 0;
   font-style: italic;
-  font-size: 1.25rem;
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
   position: relative;
+  color: #4a5568;
 }
 
-blockquote::before {
-  content: '';
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  width: var(--grid-unit);
-  height: var(--grid-unit);
-  background: var(--bauhaus-blue);
-  transform: rotate(45deg);
+.content-typography blockquote,
+.prose blockquote {
+  border-left: 4px solid var(--bauhaus-blue);
+  background: var(--bauhaus-gray);
+  padding: 1.5rem;
+  margin: 2rem 0;
+  font-style: italic;
+  font-size: var(--text-xl);
+  line-height: var(--leading-relaxed);
+  color: #2d3748;
+}
+
+.content-typography blockquote p,
+.prose blockquote p {
+  margin-bottom: 0;
+  font-size: var(--text-xl);
 }
 
 /* Images */
 img {
   max-width: 100%;
   height: auto;
-  border: 4px solid var(--bauhaus-black);
   display: block;
-  margin: var(--grid-unit-2) 0;
+  border-radius: 8px;
+}
+
+.content-typography img,
+.prose img {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Tables */
+.content-typography table,
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-size: var(--text-base);
+}
+
+.content-typography th,
+.prose th {
+  background: var(--bauhaus-gray);
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 2px solid var(--bauhaus-light-gray);
+}
+
+.content-typography td,
+.prose td {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--bauhaus-light-gray);
+}
+
+.content-typography tr:hover,
+.prose tr:hover {
+  background: var(--bauhaus-gray);
 }
 
 /* Responsive Design */
@@ -415,98 +731,93 @@ img {
     --grid-unit-2: 30px;
     --grid-unit-3: 45px;
     --grid-unit-4: 60px;
-  }
-
-  main {
-    grid-template-columns: 1fr 95% 1fr;
-    grid-column-gap: var(--grid-unit);
+    
+    --text-lg: 1rem;
+    --text-xl: 1.125rem;
+    --text-2xl: 1.25rem;
+    --text-3xl: 1.5rem;
+    --text-4xl: 1.875rem;
   }
 
   .bauhaus-card {
     padding: var(--grid-unit);
   }
 
-  p {
-    font-size: 1rem;
+  .content-typography p,
+  .prose p {
+    font-size: var(--text-base);
+  }
+
+  .content-typography h1,
+  .prose h1 {
+    font-size: var(--text-3xl);
+  }
+
+  .content-typography h2,
+  .prose h2 {
+    font-size: var(--text-2xl);
+  }
+
+  .content-typography h3,
+  .prose h3 {
+    font-size: var(--text-xl);
   }
 }
 
+/* Typography Utility Classes */
+.text-xs { font-size: var(--text-xs); }
+.text-sm { font-size: var(--text-sm); }
+.text-base { font-size: var(--text-base); }
+.text-lg { font-size: var(--text-lg); }
+.text-xl { font-size: var(--text-xl); }
+.text-2xl { font-size: var(--text-2xl); }
+.text-3xl { font-size: var(--text-3xl); }
+.text-4xl { font-size: var(--text-4xl); }
+.text-5xl { font-size: var(--text-5xl); }
+.text-6xl { font-size: var(--text-6xl); }
+
+.display-sm { font-size: var(--display-sm); }
+.display-md { font-size: var(--display-md); }
+.display-lg { font-size: var(--display-lg); }
+.display-xl { font-size: var(--display-xl); }
+.display-2xl { font-size: var(--display-2xl); }
+
+.leading-tight { line-height: var(--leading-tight); }
+.leading-snug { line-height: var(--leading-snug); }
+.leading-normal { line-height: var(--leading-normal); }
+.leading-relaxed { line-height: var(--leading-relaxed); }
+.leading-loose { line-height: var(--leading-loose); }
+
+.font-display { font-family: var(--font-display); }
+.font-body { font-family: var(--font-body); }
+.font-reading { font-family: var(--font-reading); }
+
 /* Utility Classes */
-.text-center {
-  text-align: center;
-}
-.text-left {
-  text-align: left;
-}
-.text-right {
-  text-align: right;
-}
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
 
-.mt-0 {
-  margin-top: 0;
-}
-.mt-1 {
-  margin-top: var(--grid-unit);
-}
-.mt-2 {
-  margin-top: var(--grid-unit-2);
-}
-.mt-3 {
-  margin-top: var(--grid-unit-3);
-}
-.mt-4 {
-  margin-top: var(--grid-unit-4);
-}
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--grid-unit); }
+.mt-2 { margin-top: var(--grid-unit-2); }
+.mt-3 { margin-top: var(--grid-unit-3); }
+.mt-4 { margin-top: var(--grid-unit-4); }
 
-.mb-0 {
-  margin-bottom: 0;
-}
-.mb-1 {
-  margin-bottom: var(--grid-unit);
-}
-.mb-2 {
-  margin-bottom: var(--grid-unit-2);
-}
-.mb-3 {
-  margin-bottom: var(--grid-unit-3);
-}
-.mb-4 {
-  margin-bottom: var(--grid-unit-4);
-}
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: var(--grid-unit); }
+.mb-2 { margin-bottom: var(--grid-unit-2); }
+.mb-3 { margin-bottom: var(--grid-unit-3); }
+.mb-4 { margin-bottom: var(--grid-unit-4); }
 
-.py-1 {
-  padding-top: var(--grid-unit);
-  padding-bottom: var(--grid-unit);
-}
-.py-2 {
-  padding-top: var(--grid-unit-2);
-  padding-bottom: var(--grid-unit-2);
-}
-.py-3 {
-  padding-top: var(--grid-unit-3);
-  padding-bottom: var(--grid-unit-3);
-}
-.py-4 {
-  padding-top: var(--grid-unit-4);
-  padding-bottom: var(--grid-unit-4);
-}
+.py-1 { padding-top: var(--grid-unit); padding-bottom: var(--grid-unit); }
+.py-2 { padding-top: var(--grid-unit-2); padding-bottom: var(--grid-unit-2); }
+.py-3 { padding-top: var(--grid-unit-3); padding-bottom: var(--grid-unit-3); }
+.py-4 { padding-top: var(--grid-unit-4); padding-bottom: var(--grid-unit-4); }
 
-.px-1 {
-  padding-left: var(--grid-unit);
-  padding-right: var(--grid-unit);
-}
-.px-2 {
-  padding-left: var(--grid-unit-2);
-  padding-right: var(--grid-unit-2);
-}
-.px-3 {
-  padding-left: var(--grid-unit-3);
-  padding-right: var(--grid-unit-3);
-}
-.px-4 {
-  padding-left: var(--grid-unit-4);
-  padding-right: var(--grid-unit-4);
-}
+.px-1 { padding-left: var(--grid-unit); padding-right: var(--grid-unit); }
+.px-2 { padding-left: var(--grid-unit-2); padding-right: var(--grid-unit-2); }
+.px-3 { padding-left: var(--grid-unit-3); padding-right: var(--grid-unit-3); }
+.px-4 { padding-left: var(--grid-unit-4); padding-right: var(--grid-unit-4); }
 
 /* Screen reader only */
 .sr-only {

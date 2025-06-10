@@ -1,8 +1,8 @@
 ---
 title: 'Welcome to My Blog'
 description: 'This is the inaugural post of my new multilingual blog built with Astro and TypeScript.'
-pubDate: 2024-01-15
-updatedDate: 2024-01-15
+pubDate: '2024-01-15'
+updatedDate: '2024-01-15'
 category: 'personal'
 tags: ['welcome', 'blogging', 'astro', 'typescript']
 author: 'Blog Author'

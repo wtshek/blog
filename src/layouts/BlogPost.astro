@@ -1,60 +1,51 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+import BaseLayout from './BaseLayout.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
 const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 ---
 
-<html lang="en">
-  <head>
-    <BaseHead
-      title={title}
-      description={description}
-    />
-  </head>
-
-  <body>
-    <Header />
-    <main class="w-full px-4">
-      <article>
-        <div class="w-full">
-          {
-            heroImage && (
-              <Image
-                width={1020}
-                height={510}
-                src={heroImage}
-                alt=""
-                class="mx-auto block rounded-lg border-4 border-black shadow-lg"
-              />
-            )
-          }
-        </div>
-        <div class="mx-auto w-full max-w-3xl p-4">
-          <div class="mb-4 py-4 text-center leading-tight">
-            <div class="mb-2 text-gray-600">
-              <FormattedDate date={pubDate} />
-              {
-                updatedDate && (
-                  <div class="italic">
-                    Last updated on <FormattedDate date={updatedDate} />
-                  </div>
-                )
-              }
-            </div>
-            <h1 class="my-2 text-4xl font-black">{title}</h1>
-            <hr class="border-t-2 border-black" />
+<BaseLayout 
+  title={title} 
+  description={description}
+  includeFooter={true}
+>
+  <div class="w-full px-4">
+    <article>
+      <div class="w-full">
+        {
+          heroImage && (
+            <Image
+              width={1020}
+              height={510}
+              src={heroImage}
+              alt=""
+              class="mx-auto block max-w-5xl mt-4 rounded-lg border-4 border-black shadow-lg"
+            />
+          )
+        }
+      </div>
+      <div class="mx-auto w-full max-w-5xl">
+        <div class="py-4 text-center leading-tight">
+          <div class="mb-2 text-gray-600">
+            <FormattedDate date={pubDate} />
+            {
+              updatedDate && (
+                <div class="italic">
+                  Last updated on <FormattedDate date={updatedDate} />
+                </div>
+              )
+            }
           </div>
-          <slot />
+          <h1 class="my-2 text-4xl font-black">{title}</h1>
+          <hr class="border-t-2 border-black" />
         </div>
-      </article>
-    </main>
-    <Footer />
-  </body>
-</html>
+        <slot />
+      </div>
+    </article>
+  </div>
+</BaseLayout>

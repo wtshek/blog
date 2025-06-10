@@ -1,0 +1,178 @@
+---
+import { getLangFromUrl, useTranslations } from '../i18n';
+import SocialLinks from './SocialLinks.astro';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<!-- Mobile Menu Button -->
+<button
+  id="mobile-menu-button"
+  class="mobile-menu-button relative flex h-10 items-center justify-center border-2 border-black bg-white px-4 transition-all duration-300 hover:bg-red-600 hover:text-white md:hidden"
+  aria-label="Toggle mobile menu"
+>
+  <span id="menu-button-text" class="text-sm font-bold uppercase tracking-wide">
+    {t('nav.menu.open')}
+  </span>
+</button>
+
+<!-- Mobile Navigation Menu -->
+<div
+  id="mobile-menu"
+  class="mobile-menu absolute left-0 right-0 top-full z-40 hidden border-x-8 border-b-8 border-black bg-white shadow-lg md:hidden"
+>
+  <nav class="flex flex-col space-y-4 p-4">
+    <!-- Mobile Navigation Links -->
+    <div class="flex flex-col space-y-3 border-b-2 border-black pb-4">
+      <a
+        href={lang === 'en' ? '/' : `/${lang}/`}
+        class="mobile-nav-link block border-2 border-transparent p-2 text-lg font-bold uppercase tracking-wide text-black transition-all duration-300 hover:border-black hover:bg-red-600 hover:text-white"
+      >
+        {t('nav.home')}
+      </a>
+      <a
+        href={lang === 'en' ? '/blog' : `/${lang}/blog`}
+        class="mobile-nav-link block border-2 border-transparent p-2 text-lg font-bold uppercase tracking-wide text-black transition-all duration-300 hover:border-black hover:bg-red-600 hover:text-white"
+      >
+        {t('nav.blog')}
+      </a>
+    </div>
+
+
+    <!-- Mobile Social Links -->
+    <div class="flex justify-start gap-4 pt-2">
+      <SocialLinks variant="mobile" />
+    </div>
+  </nav>
+</div>
+
+<script>
+  // Mobile menu functionality
+  document.addEventListener('DOMContentLoaded', function () {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const menuButtonText = document.getElementById('menu-button-text');
+
+    let isMenuOpen = false;
+
+    // Get translations for open/close text
+    const openText = mobileMenuButton?.getAttribute('data-open-text') || 'MENU';
+    const closeText = mobileMenuButton?.getAttribute('data-close-text') || 'CLOSE';
+
+    mobileMenuButton?.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      isMenuOpen = !isMenuOpen;
+      console.log('Menu toggle clicked, isMenuOpen:', isMenuOpen);
+
+      if (isMenuOpen) {
+        // Show menu
+        mobileMenu?.classList.remove('hidden');
+        mobileMenu?.classList.add('block');
+        mobileMenu?.classList.add('animate-slideDown');
+        mobileMenuButton?.classList.add('menu-open');
+        if (menuButtonText) menuButtonText.textContent = closeText;
+        console.log('Showing menu');
+      } else {
+        // Hide menu
+        mobileMenu?.classList.add('hidden');
+        mobileMenu?.classList.remove('block');
+        mobileMenu?.classList.remove('animate-slideDown');
+        mobileMenuButton?.classList.remove('menu-open');
+        if (menuButtonText) menuButtonText.textContent = openText;
+        console.log('Hiding menu');
+      }
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function (event) {
+      const target = event.target as Node;
+      if (
+        isMenuOpen &&
+        !mobileMenuButton?.contains(target) &&
+        !mobileMenu?.contains(target)
+      ) {
+        isMenuOpen = false;
+        mobileMenu?.classList.add('hidden');
+        mobileMenu?.classList.remove('block');
+        mobileMenu?.classList.remove('animate-slideDown');
+        mobileMenuButton?.classList.remove('menu-open');
+        if (menuButtonText) menuButtonText.textContent = openText;
+      }
+    });
+
+    // Close menu when clicking on navigation links
+    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+    mobileNavLinks.forEach((link) => {
+      link.addEventListener('click', function () {
+        isMenuOpen = false;
+        mobileMenu?.classList.add('hidden');
+        mobileMenu?.classList.remove('block');
+        mobileMenu?.classList.remove('animate-slideDown');
+        mobileMenuButton?.classList.remove('menu-open');
+        if (menuButtonText) menuButtonText.textContent = openText;
+      });
+    });
+  });
+</script>
+
+<script define:vars={{ openText: t('nav.menu.open'), closeText: t('nav.menu.close') }}>
+  // Set the translation data attributes
+  document.addEventListener('DOMContentLoaded', function () {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    if (mobileMenuButton) {
+      mobileMenuButton.setAttribute('data-open-text', openText);
+      mobileMenuButton.setAttribute('data-close-text', closeText);
+    }
+  });
+</script>
+
+<style>
+  /* Mobile specific styles */
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slideDown {
+    animation: slideDown 0.3s ease-out;
+  }
+
+  /* Mobile menu positioning and styling */
+  .mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    margin-top: 8px;
+  }
+
+  /* Ensure mobile menu is visible when not hidden */
+  .mobile-menu:not(.hidden) {
+    display: block !important;
+  }
+
+  /* Mobile responsive adjustments */
+  @media (max-width: 768px) {
+    .mobile-menu {
+      backdrop-filter: blur(10px);
+    }
+
+    .mobile-nav-link:active {
+      transform: scale(0.98);
+    }
+
+    .social-link-mobile:active {
+      transform: scale(0.95);
+    }
+  }
+</style> 

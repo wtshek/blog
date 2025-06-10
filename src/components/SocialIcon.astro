@@ -1,0 +1,82 @@
+---
+export interface Props {
+  name: string;
+  url: string;
+  ariaLabel: string;
+  color: string;
+  variant?: 'header' | 'footer' | 'mobile';
+  size?: number;
+  // Optional props for backward compatibility
+  icon?: string;
+  viewBox?: string;
+}
+
+const { name, url, ariaLabel, color, variant = 'header'} = Astro.props;
+
+// Define CSS classes based on variant
+const getVariantClasses = (variant: string) => {
+  switch (variant) {
+    case 'header':
+      return 'social-link relative flex h-10 w-10 items-center justify-center border-2 border-black text-black transition-all duration-300 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:transform hover:bg-black hover:text-white';
+    case 'footer':
+      return 'social-link relative flex flex-col items-center gap-2 border-2 border-white bg-transparent p-3 text-white no-underline transition-all duration-300 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:transform hover:bg-white hover:text-black';
+    case 'mobile':
+      return 'social-link-mobile flex h-12 w-12 items-center justify-center border-2 border-black text-black transition-all duration-300';
+    default:
+      return 'social-link relative flex h-10 w-10 items-center justify-center border-2 border-black text-black transition-all duration-300 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:transform hover:bg-black hover:text-white';
+  }
+};
+
+const variantClasses = getVariantClasses(variant);
+const uniqueId = `social-${variant}-${name.toLowerCase()}-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<a
+  href={url}
+  target="_blank"
+  class={`${variantClasses} ${uniqueId}`}
+  style={`--brand-color: ${color}`}
+>
+  <span class="sr-only">{ariaLabel}</span>
+  
+  <slot/>
+</a>
+
+<style>
+  /* Header variant hover effects */
+  .social-link::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    right: -3px;
+    bottom: -3px;
+    z-index: -1;
+    transition: all 0.3s ease;
+    opacity: 0;
+    background: var(--brand-color);
+  }
+
+  .social-link:hover::after {
+    opacity: 1;
+  }
+
+  /* Mobile variant hover effects */
+  .social-link-mobile:hover {
+    background-color: var(--brand-color) !important;
+    color: white !important;
+  }
+
+  /* Ensure the SVG icons scale properly */
+  .social-link svg,
+  .social-link-mobile svg {
+    display: block;
+  }
+
+  /* Style for custom SVG content */
+  .social-link :global(svg),
+  .social-link-mobile :global(svg) {
+    display: block;
+    transition: all 0.3s ease;
+  }
+</style> 

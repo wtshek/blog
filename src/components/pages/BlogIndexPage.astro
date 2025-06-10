@@ -1,0 +1,74 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import FormattedDate from '../FormattedDate.astro';
+
+interface Props {
+  lang: string;
+  t: (key: string) => string;
+}
+
+const { lang, t } = Astro.props;
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout>
+  <div class="container mx-auto max-w-5xl py-4 px-0">
+    <section>
+      <ul class="m-0 flex list-none flex-wrap gap-8 p-0">
+        {
+          posts.map((post, index) => (
+            <li
+              class={`${index === 0 ? 'mb-4 w-full text-center' : 'w-full md:w-[calc(50%-1rem)]'}`}
+            >
+              <a
+                href={`/blog/${post.id}/`}
+                class="block no-underline transition-all duration-200 hover:text-red-600"
+              >
+                {post.data.heroImage && (
+                  <Image
+                    width={720}
+                    height={360}
+                    src={post.data.heroImage}
+                    alt=""
+                    class={`mb-1 rounded-lg border-4 border-black transition-all duration-200 hover:shadow-lg ${index === 0 ? 'w-full' : ''}`}
+                  />
+                )}
+                <h4
+                  class={`m-0 leading-tight text-black transition-all duration-200 hover:text-red-600 ${index === 0 ? 'text-4xl' : 'text-xl'}`}
+                >
+                  {post.data.title}
+                </h4>
+                <p class="m-0 text-gray-600 transition-all duration-200 hover:text-red-600">
+                  <FormattedDate date={post.data.pubDate} />
+                </p>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .bauhaus-card::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: -4px;
+    bottom: -4px;
+    background: #ff0000;
+    z-index: -1;
+    transition: all 0.3s ease;
+  }
+
+  .bauhaus-card:hover::after {
+    background: #0066cc;
+  }
+</style> 
