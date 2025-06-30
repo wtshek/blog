@@ -1,7 +1,10 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import {
+  extractExcerpt,
+  fetchArticles,
+  type Article,
+} from '../../lib/articles';
 import FormattedDate from '../FormattedDate.astro';
 
 interface Props {
@@ -11,47 +14,82 @@ interface Props {
 
 const { lang, t } = Astro.props;
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+let articles: Article[] = [];
+let error: string | null = null;
+
+try {
+  articles = await fetchArticles();
+} catch (e) {
+  error = e instanceof Error ? e.message : 'Failed to fetch articles';
+  console.error('Error fetching articles:', e);
+}
 ---
 
 <BaseLayout>
-  <div class="container mx-auto max-w-5xl py-4 px-0">
-    <section>
-      <ul class="m-0 flex list-none flex-wrap gap-8 p-0">
-        {
-          posts.map((post, index) => (
-            <li
-              class={`${index === 0 ? 'mb-4 w-full text-center' : 'w-full md:w-[calc(50%-1rem)]'}`}
-            >
-              <a
-                href={`/blog/${post.id}/`}
-                class="block no-underline transition-all duration-200 hover:text-red-600"
+  <div class="container mx-auto max-w-5xl px-0 py-4">
+    {
+      error ? (
+        <div class="p-8 text-center">
+          <div class="mb-4 rounded border border-red-400 bg-red-100 px-4 py-3 text-red-700">
+            <strong>Error:</strong> {error}
+          </div>
+          <p class="text-gray-600">
+            Please check your CMS connection and try again.
+          </p>
+        </div>
+      ) : articles.length === 0 ? (
+        <div class="p-8 text-center">
+          <p class="text-lg text-gray-600">No articles found.</p>
+        </div>
+      ) : (
+        <section>
+          <ul class="m-0 flex list-none flex-wrap gap-8 p-0">
+            {articles.map((article, index) => (
+              <li
+                class={`${index === 0 ? 'mb-4 w-full text-center' : 'w-full md:w-[calc(50%-1rem)]'}`}
               >
-                {post.data.heroImage && (
-                  <Image
-                    width={720}
-                    height={360}
-                    src={post.data.heroImage}
-                    alt=""
-                    class={`mb-1 rounded-lg border-4 border-black transition-all duration-200 hover:shadow-lg ${index === 0 ? 'w-full' : ''}`}
-                  />
-                )}
-                <h4
-                  class={`m-0 leading-tight text-black transition-all duration-200 hover:text-red-600 ${index === 0 ? 'text-4xl' : 'text-xl'}`}
+                <a
+                  href={`/blog/${article.id}/`}
+                  class="block no-underline transition-all duration-200 hover:text-red-600"
                 >
-                  {post.data.title}
-                </h4>
-                <p class="m-0 text-gray-600 transition-all duration-200 hover:text-red-600">
-                  <FormattedDate date={post.data.pubDate} />
-                </p>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
+                  <div class="mb-4 overflow-hidden rounded-lg border-4 border-black transition-all duration-200 hover:shadow-lg">
+                    <div class="flex aspect-video items-center justify-center bg-gradient-to-br from-blue-500 via-purple-500 to-red-500">
+                      <h4
+                        class={`font-black leading-tight text-white ${index === 0 ? 'text-2xl md:text-4xl' : 'text-lg md:text-xl'} px-4 text-center`}
+                      >
+                        {article.title}
+                      </h4>
+                    </div>
+                  </div>
+
+                  <div class="text-left">
+                    <h4
+                      class={`m-0 mb-2 leading-tight text-black transition-all duration-200 hover:text-red-600 ${index === 0 ? 'text-2xl md:text-3xl' : 'text-lg md:text-xl'} font-black`}
+                    >
+                      {article.title}
+                    </h4>
+
+                    {article.content && (
+                      <p
+                        class={`mb-2 leading-relaxed text-gray-600 ${index === 0 ? 'text-lg' : 'text-sm'} line-clamp-2`}
+                      >
+                        {extractExcerpt(article.content)}
+                      </p>
+                    )}
+
+                    <div class="flex items-center justify-between text-sm text-gray-500">
+                      {article.published_at && (
+                        <FormattedDate date={new Date(article.published_at)} />
+                      )}
+                    </div>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
   </div>
 </BaseLayout>
 
@@ -71,4 +109,4 @@ const posts = (await getCollection('blog')).sort(
   .bauhaus-card:hover::after {
     background: #0066cc;
   }
-</style> 
+</style>

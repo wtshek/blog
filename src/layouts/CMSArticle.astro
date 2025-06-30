@@ -1,0 +1,92 @@
+---
+import Breadcrumb from '../components/Breadcrumb.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import {
+  type Article,
+  convertContentToHtml,
+  extractExcerpt,
+} from '../lib/articles';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  article: Article;
+  lang?: string;
+}
+
+const { article, lang = 'en' } = Astro.props;
+
+// Breadcrumb data
+const breadcrumbs = [
+  { name: lang === 'zh-TW' ? '首頁' : 'Home', href: '/' },
+  { name: lang === 'zh-TW' ? '部落格' : 'Blog', href: '/blog' },
+  { name: article.title, href: null },
+];
+---
+
+<BaseLayout
+  title={article.title}
+  description={extractExcerpt(article.content) ||
+    `Read ${article.title} on our blog`}
+  publishedDate={article.published_at
+    ? new Date(article.published_at)
+    : undefined}
+  modifiedDate={article.updated_at ? new Date(article.updated_at) : undefined}
+  author={undefined}
+  category={undefined}
+  tags={undefined}
+  type="article"
+  includeFooter={true}
+>
+  <div class="w-full px-4">
+    <article class="mx-auto max-w-4xl">
+      <Breadcrumb
+        items={breadcrumbs}
+        className="my-2"
+      />
+
+      <!-- Hero Section -->
+      <div class="mb-8 w-full">
+        <div
+          class="flex aspect-video items-center justify-center rounded-lg border-4 border-black bg-gradient-to-br from-blue-500 via-purple-500 to-red-500 shadow-lg"
+        >
+          <h1
+            class="px-8 text-center text-2xl font-black leading-tight text-white md:text-4xl lg:text-5xl"
+          >
+            {article.title}
+          </h1>
+        </div>
+      </div>
+
+      <!-- Article Header -->
+      <header class="mb-8 text-center leading-tight">
+        <div class="mb-4 text-bauhaus-dark-gray">
+          <div class="flex items-center justify-center space-x-4 text-sm">
+            {
+              article.published_at && (
+                <FormattedDate date={new Date(article.published_at)} />
+              )
+            }
+          </div>
+        </div>
+      </header>
+
+      <!-- Article Content -->
+      <div class="content-typography prose prose-lg max-w-none">
+        <div set:html={convertContentToHtml(article.content)} />
+      </div>
+
+      <!-- Article Footer -->
+      <footer class="mt-12 border-t-2 border-bauhaus-gray pt-8">
+        <!-- Back to Articles Link -->
+        <div class="mt-6 text-center">
+          <a
+            href="/blog"
+            class="inline-block rounded-lg bg-bauhaus-black px-6 py-3 font-semibold text-white transition-colors duration-200 hover:bg-bauhaus-red"
+          >
+            {lang === 'zh-TW' ? '← 返回所有文章' : '← Back to All Articles'}
+          </a>
+        </div>
+      </footer>
+    </article>
+  </div>
+</BaseLayout>

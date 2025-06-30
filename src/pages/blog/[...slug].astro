@@ -1,22 +1,47 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
+import { getLangFromUrl } from '../../i18n';
+import CMSArticle from '../../layouts/CMSArticle.astro';
+import {
+  fetchArticleById,
+  fetchArticles,
+  type Article,
+} from '../../lib/articles';
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts.map((post) => ({
-    params: { slug: post.id },
-    props: post,
-  }));
+  try {
+    const articles = await fetchArticles();
+    return articles.map((article) => ({
+      params: { slug: article.id },
+      props: { article },
+    }));
+  } catch (error) {
+    console.error('Error fetching articles for static paths:', error);
+    return [];
+  }
 }
-type Props = CollectionEntry<'blog'>;
 
-const post = Astro.props;
-const { Content } = await render(post);
+const { slug } = Astro.params;
+const { article } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+
+// If running in SSR mode and no article prop, fetch it
+let currentArticle = article;
+if (!currentArticle && slug) {
+  try {
+    currentArticle = (await fetchArticleById(slug)) as Article;
+  } catch (error) {
+    console.error('Error fetching article:', error);
+  }
+}
+
+if (!currentArticle) {
+  return Astro.redirect('/404');
+}
 ---
 
-<BlogPost {...post.data}>
-  <Content />
-</BlogPost>
+<CMSArticle
+  article={currentArticle}
+  lang={lang}
+/>

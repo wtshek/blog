@@ -1,14 +1,9 @@
 ---
-import { getCollection } from 'astro:content';
 import BlogIndexPage from '../../../components/pages/BlogIndexPage.astro';
 import { getLangFromUrl, useTranslations } from '../../../i18n';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
 ---
 
 <BlogIndexPage lang={lang} t={t as (key: string) => string} />
